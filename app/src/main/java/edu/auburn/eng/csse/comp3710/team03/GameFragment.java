@@ -10,14 +10,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * Created by JDSS on 16/4/15.
  */
 public class GameFragment extends Fragment {
 
+
+
+    //Assume nothing in this file will work
+    //not sure what we can do with respect to the whole View, ViewGroup, Layout stuff
+    //basically need to make frogSpace "View" that we can draw onto,
+    //but also need some buttons in the view, meaning it needs to be a ViewGroup of some kind
+    //not sure what we can get away with
+
+
+
+    //changing frogSpace to a LinearLayout might do away with the need for ViewGroup layout
     private ViewGroup layout;
-    private View frogSpace;
+    private LinearLayout frogSpace;
     private Context context;
     private FrogController frogController;
     private CarController carController;
@@ -31,12 +43,14 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //not sure if we need this, only way into this fragment is by starting a new game
-        if (layout != null) {
-            layout.removeView(layout);
-            return layout;
+        if (frogSpace != null) {
+            frogSpace.removeView(frogSpace);
+            return frogSpace;
         }
 
         //not sure if below code will work
+
+        //frogSpace.addView();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         layout = (ViewGroup) inflater.inflate(R.layout.game_layout, container, false);
         frogSpace = new FrogSpace(context);

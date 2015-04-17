@@ -9,7 +9,15 @@ import java.util.ArrayList;
  */
 public class CarController implements Updateable {
     ArrayList<Car> cars;
+    //endColumn and endLane are the first column and lane that are off screen
     private int endColumn;
+    private int endLane;
+
+    public CarController(int newEndColumn, int newEndLane) {
+        setEndColumn(newEndColumn);
+        setEndLane(newEndLane);
+        cars = new ArrayList<Car>();
+    }
 
     public int getEndColumn() {
         return endColumn;
@@ -17,6 +25,14 @@ public class CarController implements Updateable {
 
     public void setEndColumn(int endColumn) {
         this.endColumn = endColumn;
+    }
+
+    public int getEndLane() {
+        return endLane;
+    }
+
+    private void setEndLane(int newEndLane) {
+        endLane = newEndLane;
     }
 
     public int[][] getCarLocations() {
@@ -27,6 +43,10 @@ public class CarController implements Updateable {
             locations[i][1] = cars.get(i).getLane();
         }
         return locations;
+    }
+
+    public Boolean spawnCar() {
+
     }
 
     //returns false if car will be moved off screen
