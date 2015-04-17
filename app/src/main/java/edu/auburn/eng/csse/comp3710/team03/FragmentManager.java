@@ -9,7 +9,7 @@ public class FragmentManager extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.splash_layout);
     }
 
     /* Probably won't have options menu

@@ -13,6 +13,8 @@ public class FrogSpace extends View {
         super(context);
     }
 
+
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
     }
