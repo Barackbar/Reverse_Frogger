@@ -46,7 +46,7 @@ public class CarController implements Updateable {
     }
 
     public Boolean spawnCar() {
-
+        return false;
     }
 
     //returns false if car will be moved off screen
