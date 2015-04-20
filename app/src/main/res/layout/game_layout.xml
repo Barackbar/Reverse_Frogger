@@ -3,4 +3,65 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <edu.auburn.eng.csse.comp3710.team03.FrogSpace
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9">
+    </edu.auburn.eng.csse.comp3710.team03.FrogSpace>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="Car"
+            android:id="@+id/button"
+            android:layout_weight="3"
+            android:src="@drawable/temp_car"
+            android:scaleType="fitXY" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="New Button"
+            android:id="@+id/button2"
+            android:layout_weight="3"
+            android:src="@drawable/temp_car"
+            android:scaleType="fitXY" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="New Button"
+            android:id="@+id/button3"
+            android:layout_weight="3"
+            android:src="@drawable/temp_car"
+            android:scaleType="fitXY" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:text="New Button"
+            android:id="@+id/button4"
+            android:layout_weight="3"
+            android:scaleType="fitXY"
+            android:src="@drawable/temp_car" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView2"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 </LinearLayout>

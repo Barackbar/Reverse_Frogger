@@ -5,10 +5,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".FragmentManager"
     android:orientation="vertical"
-    android:background="@drawable/TempBackground">
+    android:background="@drawable/temp_background">
 
     <ImageView
-        android:src="@drawable/TempLogo"
+        android:src="@drawable/temp_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageViewLogo"

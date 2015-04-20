@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 /**
  * Created by JDSS on 16/4/15.
  */
-public class FrogSpace extends LinearLayout {
+public class FrogSpace extends View {
 
     public FrogSpace(Context context) {
         super(context);

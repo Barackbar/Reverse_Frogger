@@ -45,7 +45,7 @@ public class CarController implements Updateable {
         return locations;
     }
 
-    public Boolean spawnCar() {
+    public Boolean spawnCar(int lane) {
         return false;
     }
 

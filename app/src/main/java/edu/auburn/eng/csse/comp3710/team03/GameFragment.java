@@ -29,7 +29,7 @@ public class GameFragment extends Fragment {
 
     //changing frogSpace to a LinearLayout might do away with the need for ViewGroup layout
     private ViewGroup layout;
-    private LinearLayout frogSpace;
+    private View frogSpace;
     private Context context;
     private FrogController frogController;
     private CarController carController;
@@ -42,27 +42,8 @@ public class GameFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //not sure if we need this, only way into this fragment is by starting a new game
-        if (frogSpace != null) {
-            frogSpace.removeView(frogSpace);
-            return frogSpace;
-        }
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        //not sure if below code will work
-
-        //frogSpace.addView();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        layout = (ViewGroup) inflater.inflate(R.layout.game_layout, container, false);
-        frogSpace = new FrogSpace(context);
-        layout.addView(frogSpace);
-        Button carButton1 = new Button(context);
-        Button carButton2 = new Button(context);
-        Button carButton3 = new Button(context);
-        Button carButton4 = new Button(context);
-        layout.addView(carButton1);
-        layout.addView(carButton2);
-        layout.addView(carButton3);
-        layout.addView(carButton4);
 
         return layout;
 
