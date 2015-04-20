@@ -1,8 +1,12 @@
 package edu.auburn.eng.csse.comp3710.team03;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -11,17 +15,26 @@ import java.util.Random;
 public class FrogController implements Updateable {
     private static final int MAX_DIFFICULTY = 2;
     private static final int MIN_DIFFICULTY = 0;
+
+    private Context context;
+
     private ArrayList<Frog> frogs;
     private ArrayList<Integer> freeColumns;
-    private int difficulty;
-    private int score;
+
     //endColumn and endLane are the first column and lane that are off screen
     //first column and lane are 0
     private int endColumn;
     private int endLane;
+    private int difficulty;
+    private int escaped;
+
+    private Bitmap frogSit;
+    private Bitmap frogJump;
+
     private Random RNGesus;
 
-    public FrogController() {
+    public FrogController(Context newContext) {
+        context = newContext;
         endColumn = 8;
         endLane = 4;
         difficulty = 0;
@@ -31,8 +44,11 @@ public class FrogController implements Updateable {
         for (int i = 0; i < endColumn; i++) {
             freeColumns.add(i);
         }
+        escaped = 0;
+        //frogSit = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
     }
-    public FrogController(int newEndColumn, int newEndLane, int newDifficulty) {
+    public FrogController(Context newContext, int newEndColumn, int newEndLane, int newDifficulty) {
+        context = newContext;
         if (setDifficulty(newDifficulty))
             difficulty = 0;
         setEndColumn(newEndColumn);
@@ -43,6 +59,8 @@ public class FrogController implements Updateable {
         for (int i = 0; i < endColumn; i++) {
             freeColumns.add(i);
         }
+        escaped = 0;
+        //frogSit = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
     }
 
     public int getEndColumn() {
@@ -72,6 +90,14 @@ public class FrogController implements Updateable {
             difficulty = newDifficulty;
             return true;
         }
+    }
+
+    public int getEscaped() {
+        return escaped;
+    }
+
+    public void setEscaped(int escaped) {
+        this.escaped = escaped;
     }
 
     public Boolean spawnFrog() {
@@ -105,82 +131,143 @@ public class FrogController implements Updateable {
 
     private Boolean Jump(Frog frog, int[][] cars) {
         //percentage probabilities of the frog's movement, out of 100
-        int forward = 40;
-        int stay = 30;
-        int rearward = 30;
+        int forward;
+        int stay;
+        int rearward;
         int movement;
-        //search through cars for nearby cars
-        for (int i = 0; i < cars.length; i++) {
-            //if a car 1 column away
-            if (cars[i][0] == frog.getColumn() - 1) {
-                //if the car is in the same lane
-                if (cars[i][1] == frog.getLane()) {
-                    stay        -=      15;
-                    forward     +=      10;
-                    rearward    +=      5;
+        if (frog.getLane() != 0) {
+            forward = 40;
+            stay = 30;
+            rearward = 30;
+            //search through cars for nearby cars
+            for (int i = 0; i < cars.length; i++) {
+                //if a car 1 column away
+                if (cars[i][0] == frog.getColumn() - 1) {
+                    //if the car is in the same lane
+                    if (cars[i][1] == frog.getLane()) {
+                        stay -= 15;
+                        forward += 10;
+                        rearward += 5;
+                    }
+                    //if the car is in the forward lane
+                    else if (cars[i][1] == frog.getLane() + 1) {
+                        forward -= 15;
+                        stay += 10;
+                        rearward += 5;
+                    }
+                    //if the car is in the rearward lane
+                    else if (cars[i][1] == frog.getLane() - 1) {
+                        rearward -= 15;
+                        forward += 10;
+                        stay += 5;
+                    }
+                    //else do nothing to the probabilities
                 }
-                //if the car is in the forward lane
-                else if (cars[i][1] == frog.getLane() + 1) {
-                    forward     -=      15;
-                    stay        +=      10;
-                    rearward    +=      5;
+                //if a car is 2 columns away
+                else if (cars[i][0] == frog.getColumn() - 2) {
+                    //if the car is in the same lane
+                    if (cars[i][1] == frog.getLane()) {
+                        stay -= 10;
+                        forward += 7;
+                        rearward += 3;
+                    }
+                    //if the car is in the forward lane
+                    else if (cars[i][1] == frog.getLane() + 1) {
+                        forward -= 10;
+                        stay += 7;
+                        rearward += 3;
+                    }
+                    //if the car is in the rearward lane
+                    else if (cars[i][1] == frog.getLane() - 1) {
+                        rearward -= 10;
+                        forward += 7;
+                        stay += 3;
+                    }
+                    //else do nothing to the probabilities
                 }
-                //if the car is in the rearward lane
-                else if (cars[i][1] == frog.getLane() - 1) {
-                    rearward    -=      15;
-                    forward     +=      10;
-                    stay        +=      5;
-                }
-                //else do nothing to the probabilities
             }
-            //if a car is 2 columns away
-            else if (cars[i][0] == frog.getColumn() - 2) {
-                //if the car is in the same lane
-                if (cars[i][1] == frog.getLane()) {
-                    stay        -=      10;
-                    forward     +=      7;
-                    rearward    +=      3;
-                }
-                //if the car is in the forward lane
-                else if (cars[i][1] == frog.getLane() + 1) {
-                    forward     -=      10;
-                    stay        +=      7;
-                    rearward    +=      3;
-                }
-                //if the car is in the rearward lane
-                else if (cars[i][1] == frog.getLane() - 1) {
-                    rearward    -=      10;
-                    forward     +=      7;
-                    stay        +=      3;
-                }
-                //else do nothing to the probabilities
+            //PRAISE RNGesus
+            movement = RNGesus.nextInt(100);
+            //move frog
+            if (movement < forward) { //move forward
+                frog.setLane(frog.getLane() + 1);
+            } else if (movement < forward + rearward) { //move rearward
+                frog.setLane(frog.getLane() - 1);
             }
-        }
-        //PRAISE RNGesus
-        movement = RNGesus.nextInt(100);
-        //move frog
-        if (movement < forward) { //move forward
-            frog.setLane(frog.getLane() + 1);
-        }
-        else if (movement < forward + rearward) { //move rearward
-            frog.setLane(frog.getLane() - 1);
-        }
-        //otherwise, stay still
+            //otherwise, stay still
 
-        //if the frog jumped into the endLane, return true
-        return (frog.getLane() == endLane);
+            //if the frog jumped into the endLane, return true
+            return (frog.getLane() == endLane);
+        }
+
+        else {
+            //percentage probabilities of the frog's movement, out of 100
+            forward = 60;
+            stay = 40;
+            //search through cars for nearby cars
+            for (int i = 0; i < cars.length; i++) {
+                //if a car 1 column away
+                if (cars[i][0] == frog.getColumn() - 1) {
+                    //if the car is in the same lane
+                    if (cars[i][1] == frog.getLane()) {
+                        stay -= 20;
+                        forward += 20;
+                    }
+                    //if the car is in the forward lane
+                    else if (cars[i][1] == frog.getLane() + 1) {
+                        forward -= 20;
+                        stay += 20;
+                    }
+                    //else do nothing to the probabilities
+                }
+                //if a car is 2 columns away
+                else if (cars[i][0] == frog.getColumn() - 2) {
+                    //if the car is in the same lane
+                    if (cars[i][1] == frog.getLane()) {
+                        stay -= 12;
+                        forward += 12;
+                    }
+                    //if the car is in the forward lane
+                    else if (cars[i][1] == frog.getLane() + 1) {
+                        forward -= 12;
+                        stay += 12;
+                    }
+                    //else do nothing to the probabilities
+                }
+            }
+            //PRAISE RNGesus
+            movement = RNGesus.nextInt(100);
+            //move frog
+            if (movement < forward) { //move forward
+                frog.setLane(frog.getLane() + 1);
+            }
+            //otherwise, stay still
+
+            //if the frog jumped into the endLane, return true
+            return (frog.getLane() == endLane);
+        }
     }
 
     @Override
     public void Draw(Canvas canvas) {
-
+        for (int i = 0; i < frogs.size(); i++) {
+            //canvas.drawBitmap();
+        }
     }
 
     @Override
     public void Update(int[][] cars) {
+        //
         for (int i = 0; i < frogs.size(); i++) {
             if (Jump(frogs.get(i), cars))
-                score++;
+                escaped++;
+        }
+        //remove all frogs who escaped
+        for (Iterator<Frog> iterator = frogs.iterator(); iterator.hasNext();) {
+            Frog frog = iterator.next();
+            if (frog.getLane() == endLane) {
+                iterator.remove();
+            }
         }
     }
 }
