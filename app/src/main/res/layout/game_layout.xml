@@ -6,7 +6,8 @@
     <edu.auburn.eng.csse.comp3710.team03.FrogSpace
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9">
+        android:layout_weight="9"
+        android:id="@+id/frogSpace">
     </edu.auburn.eng.csse.comp3710.team03.FrogSpace>
 
     <LinearLayout
@@ -18,7 +19,6 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="Car"
             android:id="@+id/button"
             android:layout_weight="1"
             android:src="@drawable/temp_car"
@@ -27,7 +27,6 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="New Button"
             android:id="@+id/button2"
             android:layout_weight="1"
             android:src="@drawable/temp_car"
@@ -36,7 +35,6 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="New Button"
             android:id="@+id/button3"
             android:layout_weight="1"
             android:src="@drawable/temp_car"
@@ -45,7 +43,6 @@
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:text="New Button"
             android:id="@+id/button4"
             android:layout_weight="1"
             android:scaleType="fitXY"

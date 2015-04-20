@@ -14,6 +14,7 @@ public class FrogController implements Updateable {
     private ArrayList<Frog> frogs;
     private ArrayList<Integer> freeColumns;
     private int difficulty;
+    private int score;
     //endColumn and endLane are the first column and lane that are off screen
     //first column and lane are 0
     private int endColumn;
@@ -107,6 +108,7 @@ public class FrogController implements Updateable {
         int forward = 40;
         int stay = 30;
         int rearward = 30;
+        int movement;
         //search through cars for nearby cars
         for (int i = 0; i < cars.length; i++) {
             //if a car 1 column away
@@ -153,14 +155,20 @@ public class FrogController implements Updateable {
                 }
                 //else do nothing to the probabilities
             }
-
         }
         //PRAISE RNGesus
+        movement = RNGesus.nextInt(100);
         //move frog
-        if (frog.getLane() == endLane)
-            return false;
-        else
-            return true;
+        if (movement < forward) { //move forward
+            frog.setLane(frog.getLane() + 1);
+        }
+        else if (movement < forward + rearward) { //move rearward
+            frog.setLane(frog.getLane() - 1);
+        }
+        //otherwise, stay still
+
+        //if the frog jumped into the endLane, return true
+        return (frog.getLane() == endLane);
     }
 
     @Override
@@ -169,7 +177,10 @@ public class FrogController implements Updateable {
     }
 
     @Override
-    public void Update() {
-
+    public void Update(int[][] cars) {
+        for (int i = 0; i < frogs.size(); i++) {
+            if (Jump(frogs.get(i), cars))
+                score++;
+        }
     }
 }

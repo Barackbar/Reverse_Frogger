@@ -66,7 +66,7 @@ public class CarController implements Updateable {
     }
 
     @Override
-    public void Update() {
+    public void Update(int[][] frogs) {
         for (int i = 0; i < cars.size(); i++) {
             //remove car if it moves off screen
             if (!move(cars.get(i)))
