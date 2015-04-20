@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
  * Created by JDSS on 16/4/15.
  */
 public class FrogSpace extends View {
+    private FrogController frogController;
+    private CarController carController;
 
     public FrogSpace(Context context) {
         super(context);
@@ -18,5 +20,11 @@ public class FrogSpace extends View {
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //update cars
+        //update frogs
+
+        //draw background
+        //draw frogs
+        //draw cars
     }
 }
