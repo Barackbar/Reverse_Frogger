@@ -17,21 +17,24 @@ public class FrogSpace extends View {
 
     public FrogSpace(Context context) {
         super(context);
+        frogController = new FrogController(context, 8, 4, 0);
+        carController = new CarController(context, 8, 4);
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road);
     }
-
-
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //update frogs
-        frogController.Update(carController.getCarLocations());
-        //update cars
-        carController.Update(frogController.getFrogLocations());
+        frogController.setCarLocations(carController.getCarLocations());
+        frogController.Update();
+        //update carLocations
+        carController.Update();
 
         //draw background
         canvas.drawBitmap(background, ((float) canvas.getWidth())/2, ((float) canvas.getHeight())/2, new Paint());
         //draw frogs
+        frogController.Draw(canvas);
         //draw cars
+        carController.Draw(canvas);
     }
 }

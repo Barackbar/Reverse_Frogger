@@ -1,6 +1,10 @@
 package edu.auburn.eng.csse.comp3710.team03;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import java.util.ArrayList;
 
@@ -13,10 +17,20 @@ public class CarController implements Updateable {
     private int endColumn;
     private int endLane;
 
-    public CarController(int newEndColumn, int newEndLane) {
+    private Bitmap carBitmap;
+
+    public CarController(Context context) {
+        setEndColumn(8);
+        setEndLane(4);
+        cars = new ArrayList<Car>();
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.car);
+    }
+
+    public CarController(Context context, int newEndColumn, int newEndLane) {
         setEndColumn(newEndColumn);
         setEndLane(newEndLane);
         cars = new ArrayList<Car>();
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.car);
     }
 
     public int getEndColumn() {
@@ -62,11 +76,19 @@ public class CarController implements Updateable {
 
     @Override
     public void Draw(Canvas canvas) {
-
+        Paint paint = new Paint();
+        for (Car car : cars) {
+            //change to drawBitmap(bitmap, Rect src, Rect dst, paint)
+            canvas.drawBitmap(
+                    carBitmap,
+                    (((float) car.getLane())    * (canvas.getWidth()    / endLane)),
+                    (((float) car.getColumn())  * (canvas.getHeight()   / endColumn)),
+                    paint);
+        }
     }
 
     @Override
-    public void Update(int[][] frogs) {
+    public void Update() {
         for (int i = 0; i < cars.size(); i++) {
             //remove car if it moves off screen
             if (!move(cars.get(i)))

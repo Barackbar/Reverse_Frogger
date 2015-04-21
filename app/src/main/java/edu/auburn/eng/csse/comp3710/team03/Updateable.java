@@ -7,7 +7,7 @@ import android.graphics.Canvas;
  */
 public interface Updateable {
 
-    public void Update(int[][] otherLocations);
+    public void Update();
 
     public void Draw(Canvas canvas);
 }

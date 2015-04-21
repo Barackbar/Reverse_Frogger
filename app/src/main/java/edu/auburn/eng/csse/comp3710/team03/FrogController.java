@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import java.util.Random;
  * Created by JDSS on 16/4/15.
  */
 public class FrogController implements Updateable {
+
     private static final int MAX_DIFFICULTY = 2;
     private static final int MIN_DIFFICULTY = 0;
 
@@ -27,11 +29,13 @@ public class FrogController implements Updateable {
     private int endLane;
     private int difficulty;
     private int escaped;
+    int[][] carLocations;
 
-    private Bitmap frogSit;
-    private Bitmap frogJump;
+    private Bitmap frogSitBitmap;
+    private Bitmap frogJumpBitmap;
 
     private Random RNGesus;
+
 
     public FrogController(Context newContext) {
         context = newContext;
@@ -45,7 +49,7 @@ public class FrogController implements Updateable {
             freeColumns.add(i);
         }
         escaped = 0;
-        //frogSit = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
+        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
     }
     public FrogController(Context newContext, int newEndColumn, int newEndLane, int newDifficulty) {
         context = newContext;
@@ -60,7 +64,7 @@ public class FrogController implements Updateable {
             freeColumns.add(i);
         }
         escaped = 0;
-        //frogSit = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
+        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
     }
 
     public int getEndColumn() {
@@ -129,6 +133,9 @@ public class FrogController implements Updateable {
         return locations;
     }
 
+    public void setCarLocations(int[][] newCarLocations) {
+        carLocations = newCarLocations;
+    }
     private Boolean Jump(Frog frog, int[][] cars) {
         //percentage probabilities of the frog's movement, out of 100
         int forward;
@@ -139,7 +146,7 @@ public class FrogController implements Updateable {
             forward = 40;
             stay = 30;
             rearward = 30;
-            //search through cars for nearby cars
+            //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
                 //if a car 1 column away
                 if (cars[i][0] == frog.getColumn() - 1) {
@@ -204,7 +211,7 @@ public class FrogController implements Updateable {
             //percentage probabilities of the frog's movement, out of 100
             forward = 60;
             stay = 40;
-            //search through cars for nearby cars
+            //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
                 //if a car 1 column away
                 if (cars[i][0] == frog.getColumn() - 1) {
@@ -250,16 +257,22 @@ public class FrogController implements Updateable {
 
     @Override
     public void Draw(Canvas canvas) {
-        for (int i = 0; i < frogs.size(); i++) {
-            //canvas.drawBitmap();
+        Paint paint = new Paint();
+        for (Frog frog : frogs) {
+            //change to drawBitmap(bitmap, Rect src, Rect dst, paint)
+            canvas.drawBitmap(
+                    frogSitBitmap,
+                    (((float) frog.getLane())    * (canvas.getWidth()    / endLane)),
+                    (((float) frog.getColumn())  * (canvas.getHeight()   / endColumn)),
+                    paint);
         }
     }
 
     @Override
-    public void Update(int[][] cars) {
+    public void Update() {
         //
         for (int i = 0; i < frogs.size(); i++) {
-            if (Jump(frogs.get(i), cars))
+            if (Jump(frogs.get(i), carLocations))
                 escaped++;
         }
         //remove all frogs who escaped

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 /**
@@ -19,9 +20,16 @@ public class GameFragment extends Fragment {
 
     private View frogSpace;
     private View view;
+
     private Context context;
+
     private FrogController frogController;
     private CarController carController;
+
+    private ImageButton lane0Button;
+    private ImageButton lane1Button;
+    private ImageButton lane2Button;
+    private ImageButton lane3Button;
 
     @Override
     public void onAttach(Activity activity) {
@@ -30,11 +38,47 @@ public class GameFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+
+        if (view != null) {
+            ((ViewGroup) view.getParent()).removeView(view);
+            return view;
+        }
+
         view = inflater.inflate(R.layout.game_layout, container, false);
+
+        frogSpace = (FrogSpace) view.findViewById(R.id.frogSpace);
+
+        lane0Button = (ImageButton) view.findViewById(R.id.lane0Button);
+        lane1Button = (ImageButton) view.findViewById(R.id.lane1Button);
+        lane2Button = (ImageButton) view.findViewById(R.id.lane2Button);
+        lane3Button = (ImageButton) view.findViewById(R.id.lane3Button);
+
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }
