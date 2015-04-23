@@ -152,7 +152,7 @@ public class FrogController implements Updateable {
             //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
                 //if a car 1 column away
-                if (cars[i][0] == frog.getColumn() - 1) {
+                if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
                         stay -= 15;
@@ -174,7 +174,7 @@ public class FrogController implements Updateable {
                     //else do nothing to the probabilities
                 }
                 //if a car is 2 columns away
-                else if (cars[i][0] == frog.getColumn() - 2) {
+                else if (cars[i][0] == frog.getColumn() + 2) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
                         stay -= 10;
@@ -217,7 +217,7 @@ public class FrogController implements Updateable {
             //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
                 //if a car 1 column away
-                if (cars[i][0] == frog.getColumn() - 1) {
+                if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
                         stay -= 20;
@@ -231,7 +231,7 @@ public class FrogController implements Updateable {
                     //else do nothing to the probabilities
                 }
                 //if a car is 2 columns away
-                else if (cars[i][0] == frog.getColumn() - 2) {
+                else if (cars[i][0] == frog.getColumn() + 2) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
                         stay -= 12;
@@ -262,15 +262,24 @@ public class FrogController implements Updateable {
     public void Draw(Canvas canvas) {
         Paint paint = new Paint();
 
+/*      //use for testing
+        ArrayList<Frog> tempFrogs = new ArrayList<>();
+        tempFrogs.add(new Frog(4, 0));
+        tempFrogs.add(new Frog(5, 1));
+        tempFrogs.add(new Frog(6, 2));
+        tempFrogs.add(new Frog(7, 3));
+
+        for (Frog frog : tempFrogs) {
+*/
         for (Frog frog : frogs) {
             canvas.drawBitmap(
                     frogSitBitmap,
                     null,
                     new Rect(
-                            ((frog.getLane()/endLane) * canvas.getWidth()),
-                            ((frog.getLane()/endColumn) * canvas.getHeight()),
-                            (((frog.getLane()/endLane) + 1) * canvas.getWidth()),
-                            (((frog.getLane()/endColumn) + 1) * canvas.getHeight())
+                            (int) (((float) frog.getLane()/endLane) * canvas.getWidth()),
+                            (int) (((float) frog.getColumn()/endColumn) * canvas.getHeight()),
+                            (int) ((((float) frog.getLane() + 1)/endLane) * canvas.getWidth()),
+                            (int) ((((float) frog.getColumn() + 1)/endColumn) * canvas.getHeight())
                     ),
                     paint
             );

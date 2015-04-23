@@ -66,7 +66,7 @@ public class CarController implements Updateable {
 
     //returns false if car will be moved off screen
     private Boolean move(Car car) {
-        if (car.getColumn() + 1 == endColumn) {
+        if (car.getColumn() - 1 == endColumn) {
             return false;
         }
         else {
@@ -78,15 +78,26 @@ public class CarController implements Updateable {
     @Override
     public void Draw(Canvas canvas) {
         Paint paint = new Paint();
+
+/*        //      use for testing
+        ArrayList<Car> tempCars = new ArrayList<>();
+        tempCars.add(new Car(4, 0));
+        tempCars.add(new Car(5, 1));
+        tempCars.add(new Car(6, 2));
+        tempCars.add(new Car(7, 3));
+
+        for (Car car : tempCars) {
+*/
+
         for (Car car : cars) {
             canvas.drawBitmap(
                     carBitmap,
                     null,
                     new Rect(
-                            ((car.getLane()/endLane) * canvas.getWidth()),
-                            ((car.getLane()/endColumn) * canvas.getHeight()),
-                            (((car.getLane()/endLane) + 1) * canvas.getWidth()),
-                            (((car.getLane()/endColumn) + 1) * canvas.getHeight())
+                            (int) (((float) car.getLane()/endLane) * canvas.getWidth()),
+                            (int) (((float) car.getColumn()/endColumn) * canvas.getHeight()),
+                            (int) ((((float) car.getLane() + 1)/endLane) * canvas.getWidth()),
+                            (int) ((((float) car.getColumn() + 1)/endColumn) * canvas.getHeight())
                     ),
                     paint
             );

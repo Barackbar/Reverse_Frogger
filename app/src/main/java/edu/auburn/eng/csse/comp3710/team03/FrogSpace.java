@@ -53,6 +53,6 @@ public class FrogSpace extends View {
         //draw frogs
         frogController.Draw(canvas);
         //draw cars
-        //carController.Draw(canvas);
+        carController.Draw(canvas);
     }
 }
