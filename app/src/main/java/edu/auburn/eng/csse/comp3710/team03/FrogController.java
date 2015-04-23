@@ -263,8 +263,6 @@ public class FrogController implements Updateable {
         Paint paint = new Paint();
 
         for (Frog frog : frogs) {
-            //change to drawBitmap(bitmap, Rect src, Rect dst, paint)
-
             canvas.drawBitmap(
                     frogSitBitmap,
                     null,
@@ -276,7 +274,6 @@ public class FrogController implements Updateable {
                     ),
                     paint
             );
-
         }
     }
 

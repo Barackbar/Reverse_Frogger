@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import java.util.ArrayList;
 
@@ -78,12 +79,17 @@ public class CarController implements Updateable {
     public void Draw(Canvas canvas) {
         Paint paint = new Paint();
         for (Car car : cars) {
-            //change to drawBitmap(bitmap, Rect src, Rect dst, paint)
             canvas.drawBitmap(
                     carBitmap,
-                    (((float) car.getLane())    * (canvas.getWidth()    / endLane)),
-                    (((float) car.getColumn())  * (canvas.getHeight()   / endColumn)),
-                    paint);
+                    null,
+                    new Rect(
+                            ((car.getLane()/endLane) * canvas.getWidth()),
+                            ((car.getLane()/endColumn) * canvas.getHeight()),
+                            (((car.getLane()/endLane) + 1) * canvas.getWidth()),
+                            (((car.getLane()/endColumn) + 1) * canvas.getHeight())
+                    ),
+                    paint
+            );
         }
     }
 
