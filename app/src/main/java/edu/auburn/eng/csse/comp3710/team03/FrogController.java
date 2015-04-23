@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,8 +50,9 @@ public class FrogController implements Updateable {
             freeColumns.add(i);
         }
         escaped = 0;
-        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
+        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_logo);
     }
+
     public FrogController(Context newContext, int newEndColumn, int newEndLane, int newDifficulty) {
         context = newContext;
         if (setDifficulty(newDifficulty))
@@ -64,7 +66,7 @@ public class FrogController implements Updateable {
             freeColumns.add(i);
         }
         escaped = 0;
-        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog_sit);
+        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_logo);
     }
 
     public int getEndColumn() {
@@ -136,6 +138,7 @@ public class FrogController implements Updateable {
     public void setCarLocations(int[][] newCarLocations) {
         carLocations = newCarLocations;
     }
+
     private Boolean Jump(Frog frog, int[][] cars) {
         //percentage probabilities of the frog's movement, out of 100
         int forward;
@@ -258,13 +261,22 @@ public class FrogController implements Updateable {
     @Override
     public void Draw(Canvas canvas) {
         Paint paint = new Paint();
+
         for (Frog frog : frogs) {
             //change to drawBitmap(bitmap, Rect src, Rect dst, paint)
+
             canvas.drawBitmap(
                     frogSitBitmap,
-                    (((float) frog.getLane())    * (canvas.getWidth()    / endLane)),
-                    (((float) frog.getColumn())  * (canvas.getHeight()   / endColumn)),
-                    paint);
+                    null,
+                    new Rect(
+                            ((frog.getLane()/endLane) * canvas.getWidth()),
+                            ((frog.getLane()/endColumn) * canvas.getHeight()),
+                            (((frog.getLane()/endLane) + 1) * canvas.getWidth()),
+                            (((frog.getLane()/endColumn) + 1) * canvas.getHeight())
+                    ),
+                    paint
+            );
+
         }
     }
 

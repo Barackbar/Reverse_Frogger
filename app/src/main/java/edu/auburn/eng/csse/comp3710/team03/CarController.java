@@ -23,14 +23,14 @@ public class CarController implements Updateable {
         setEndColumn(8);
         setEndLane(4);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.car);
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_car);
     }
 
     public CarController(Context context, int newEndColumn, int newEndLane) {
         setEndColumn(newEndColumn);
         setEndLane(newEndLane);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.car);
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_car);
     }
 
     public int getEndColumn() {
