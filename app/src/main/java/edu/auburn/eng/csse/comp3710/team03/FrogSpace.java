@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -23,6 +24,8 @@ public class FrogSpace extends View {
         super(context);
         frogController = new FrogController(context, 8, 4, 0);
         carController = new CarController(context, 8, 4);
+        options  = new BitmapFactory.Options();
+        options.inSampleSize = 8;
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road);
     }
 
@@ -35,8 +38,17 @@ public class FrogSpace extends View {
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road, options);
     }
 
+    public int[][] getFrogLocations() {
+        return frogController.getFrogLocations();
+    }
+
+    public int[][] getCarLocations() {
+        return carController.getCarLocations();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
+        Log.i("FrogSpace", "onDraw");
         super.onDraw(canvas);
 
         if (rect == null) {
@@ -51,8 +63,10 @@ public class FrogSpace extends View {
         //draw background
         canvas.drawBitmap(background, null, rect, new Paint());
         //draw frogs
+        Log.i("GameFragment", "frogController.Draw");
         frogController.Draw(canvas);
         //draw cars
+        Log.i("GameFragment", "carController.Draw");
         carController.Draw(canvas);
     }
 }

@@ -139,12 +139,22 @@ public class FrogController implements Updateable {
         carLocations = newCarLocations;
     }
 
-    private Boolean Jump(Frog frog, int[][] cars) {
+    //return 1 if frog escaped, -1 if frog hit, 0 otherwise
+    private int Jump(Frog frog, int[][] cars) {
+
+        //check if frog was hit
+        for (int i = 0; i < cars.length; i++) {
+            if (frog.getColumn() == cars[i][0] && frog.getLane() == cars[i][1]) {
+                return -1;
+            }
+        }
+
         //percentage probabilities of the frog's movement, out of 100
         int forward;
         int stay;
         int rearward;
         int movement;
+
         if (frog.getLane() != 0) {
             forward = 40;
             stay = 30;
@@ -201,21 +211,22 @@ public class FrogController implements Updateable {
             //move frog
             if (movement < forward) { //move forward
                 frog.setLane(frog.getLane() + 1);
-            } else if (movement < forward + rearward) { //move rearward
+            }
+            else if (movement < forward + rearward) { //move rearward
                 frog.setLane(frog.getLane() - 1);
             }
             //otherwise, stay still
-
-            //if the frog jumped into the endLane, return true
-            return (frog.getLane() == endLane);
         }
 
         else {
+
             //percentage probabilities of the frog's movement, out of 100
             forward = 60;
             stay = 40;
+
             //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
+
                 //if a car 1 column away
                 if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
@@ -244,17 +255,22 @@ public class FrogController implements Updateable {
                     }
                     //else do nothing to the probabilities
                 }
+
             }
+
             //PRAISE RNGesus
             movement = RNGesus.nextInt(100);
             //move frog
             if (movement < forward) { //move forward
                 frog.setLane(frog.getLane() + 1);
             }
-            //otherwise, stay still
+        }
 
-            //if the frog jumped into the endLane, return true
-            return (frog.getLane() == endLane);
+        if (frog.getLane() == endLane) {
+            return 1;
+        }
+        else {
+            return 0;
         }
     }
 
@@ -290,7 +306,7 @@ public class FrogController implements Updateable {
     public void Update() {
         //
         for (int i = 0; i < frogs.size(); i++) {
-            if (Jump(frogs.get(i), carLocations))
+            if (Jump(frogs.get(i), carLocations) == 1)
                 escaped++;
         }
         //remove all frogs who escaped
