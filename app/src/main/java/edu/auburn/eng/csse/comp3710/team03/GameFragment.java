@@ -38,9 +38,6 @@ public class GameFragment extends Fragment {
     private ImageButton lane2Button;
     private ImageButton lane3Button;
 
-    private int frogsEscaped;
-    private int frogsHit;
-
     @Override
     public void onAttach(Activity activity) {
         Log.i("GameFragment", "onAttach");
@@ -99,7 +96,6 @@ public class GameFragment extends Fragment {
                 super.handleMessage(msg);
                 Log.i("GameFragment", "frogSpace.invalidate()");
                 frogSpace.invalidate();
-
             }
         };
 

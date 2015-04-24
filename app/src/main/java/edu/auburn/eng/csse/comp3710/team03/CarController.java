@@ -8,13 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by JDSS on 16/4/15.
  */
 public class CarController implements Updateable {
     ArrayList<Car> cars;
-    //endColumn and endLane are the first column and lane that are off screen
+    //endColumn and endLane are the number of columns and lanes
+    //numbered from top left to bottom right in portrait mode
     private int endColumn;
     private int endLane;
 
@@ -24,14 +26,14 @@ public class CarController implements Updateable {
         setEndColumn(8);
         setEndLane(4);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.redCar);
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car);
     }
 
     public CarController(Context context, int newEndColumn, int newEndLane) {
         setEndColumn(newEndColumn);
         setEndLane(newEndLane);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.redCar);
+        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car);
     }
 
     public int getEndColumn() {
@@ -61,18 +63,18 @@ public class CarController implements Updateable {
     }
 
     public Boolean spawnCar(int lane) {
-        return false;
+        //make sure there's no car where the new one will spawn
+        for (Car car : cars) {
+            if (car.getLane() == lane && car.getColumn() == endColumn - 1) {
+                return false;
+            }
+        }
+        cars.add(new Car(endColumn - 1, lane));
+        return true;
     }
 
-    //returns false if car will be moved off screen
-    private Boolean move(Car car) {
-        if (car.getColumn() - 1 == endColumn) {
-            return false;
-        }
-        else {
-            car.setColumn(car.getColumn() + 1);
-            return true;
-        }
+    private void move(Car car) {
+        car.setColumn(car.getColumn() - 1);
     }
 
     @Override
@@ -106,10 +108,12 @@ public class CarController implements Updateable {
 
     @Override
     public void Update() {
-        for (int i = 0; i < cars.size(); i++) {
-            //remove car if it moves off screen
-            if (!move(cars.get(i)))
-               cars.remove(i);
+        //move cars, remove off screen cars
+        for (Iterator<Car> iterator = cars.iterator(); iterator.hasNext();) {
+            Car car = iterator.next();
+            move(car);
+            if (car.getColumn() < 0)
+                iterator.remove();
         }
     }
 }

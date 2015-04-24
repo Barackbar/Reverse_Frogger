@@ -24,18 +24,20 @@ public class FrogController implements Updateable {
     private ArrayList<Frog> frogs;
     private ArrayList<Integer> freeColumns;
 
-    //endColumn and endLane are the first column and lane that are off screen
-    //first column and lane are 0
+    //endColumn and endLane are the number of columns and lanes
+    //numbered from top left to bottom right in portrait mode
     private int endColumn;
     private int endLane;
     private int difficulty;
-    private int escaped;
     int[][] carLocations;
 
     private Bitmap frogSitBitmap;
     private Bitmap frogJumpBitmap;
 
     private Random RNGesus;
+
+    private int frogsEscaped;
+    private int frogsHit;
 
 
     public FrogController(Context newContext) {
@@ -49,7 +51,8 @@ public class FrogController implements Updateable {
         for (int i = 0; i < endColumn; i++) {
             freeColumns.add(i);
         }
-        escaped = 0;
+        frogsEscaped = 0;
+        frogsHit = 0;
         frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_logo);
     }
 
@@ -65,7 +68,8 @@ public class FrogController implements Updateable {
         for (int i = 0; i < endColumn; i++) {
             freeColumns.add(i);
         }
-        escaped = 0;
+        frogsEscaped = 0;
+        frogsHit = 0;
         frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.temp_logo);
     }
 
@@ -96,14 +100,6 @@ public class FrogController implements Updateable {
             difficulty = newDifficulty;
             return true;
         }
-    }
-
-    public int getEscaped() {
-        return escaped;
-    }
-
-    public void setEscaped(int escaped) {
-        this.escaped = escaped;
     }
 
     public Boolean spawnFrog() {
@@ -139,15 +135,7 @@ public class FrogController implements Updateable {
         carLocations = newCarLocations;
     }
 
-    //return 1 if frog escaped, -1 if frog hit, 0 otherwise
-    private int Jump(Frog frog, int[][] cars) {
-
-        //check if frog was hit
-        for (int i = 0; i < cars.length; i++) {
-            if (frog.getColumn() == cars[i][0] && frog.getLane() == cars[i][1]) {
-                return -1;
-            }
-        }
+    private void Jump(Frog frog, int[][] cars) {
 
         //percentage probabilities of the frog's movement, out of 100
         int forward;
@@ -155,6 +143,7 @@ public class FrogController implements Updateable {
         int rearward;
         int movement;
 
+        //if the frog is not in the starting lane
         if (frog.getLane() != 0) {
             forward = 40;
             stay = 30;
@@ -218,12 +207,11 @@ public class FrogController implements Updateable {
             //otherwise, stay still
         }
 
+        //else the frog is in the first lane
         else {
-
             //percentage probabilities of the frog's movement, out of 100
             forward = 60;
             stay = 40;
-
             //search through carLocations for nearby carLocations
             for (int i = 0; i < cars.length; i++) {
 
@@ -265,13 +253,17 @@ public class FrogController implements Updateable {
                 frog.setLane(frog.getLane() + 1);
             }
         }
+    }
 
-        if (frog.getLane() == endLane) {
-            return 1;
+    private Boolean isHit(Frog frog, int[][] cars) {
+        for (int i = 0; i < carLocations.length; i++) {
+            //if frog is in same location as car, frog was hit
+            if (frog.getLane() == carLocations[i][1] && frog.getColumn() == carLocations[i][0]) {
+                i = carLocations.length;
+                return true;
+            }
         }
-        else {
-            return 0;
-        }
+        return false;
     }
 
     @Override
@@ -304,16 +296,23 @@ public class FrogController implements Updateable {
 
     @Override
     public void Update() {
-        //
-        for (int i = 0; i < frogs.size(); i++) {
-            if (Jump(frogs.get(i), carLocations) == 1)
-                escaped++;
-        }
-        //remove all frogs who escaped
+        //look through frogs
         for (Iterator<Frog> iterator = frogs.iterator(); iterator.hasNext();) {
             Frog frog = iterator.next();
-            if (frog.getLane() == endLane) {
+
+            //if frog is in endLane, frog has escaped
+            if (frog.getLane() >= endLane) {
                 iterator.remove();
+                frogsEscaped++;
+            }
+            //else if frog is hit by car
+            else if (isHit(frog, carLocations)) {
+                iterator.remove();
+                frogsHit++;
+            }
+            //else frog can jump
+            else {
+                Jump(frog, carLocations);
             }
         }
     }

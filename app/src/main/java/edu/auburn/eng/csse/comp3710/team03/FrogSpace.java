@@ -19,6 +19,10 @@ public class FrogSpace extends View {
     private Bitmap background;
     private BitmapFactory.Options options;
     private Rect rect;
+    private Paint paint;
+
+    private int frogsEscaped;
+    private int frogsHit;
 
     public FrogSpace(Context context) {
         super(context);
@@ -27,6 +31,7 @@ public class FrogSpace extends View {
         options  = new BitmapFactory.Options();
         options.inSampleSize = 8;
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road);
+        paint = new Paint();
     }
 
     public FrogSpace(Context context, AttributeSet attributeSet) {
@@ -36,6 +41,7 @@ public class FrogSpace extends View {
         options  = new BitmapFactory.Options();
         options.inSampleSize = 8;
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road, options);
+        paint = new Paint();
     }
 
     public int[][] getFrogLocations() {
@@ -54,14 +60,15 @@ public class FrogSpace extends View {
         if (rect == null) {
             rect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
         }
+
         //update frogs
-        //frogController.setCarLocations(carController.getCarLocations());
-        //frogController.Update();
+        frogController.setCarLocations(carController.getCarLocations());
+        frogController.Update();
         //update carLocations
-        //carController.Update();
+        carController.Update();
 
         //draw background
-        canvas.drawBitmap(background, null, rect, new Paint());
+        canvas.drawBitmap(background, null, rect, paint);
         //draw frogs
         Log.i("GameFragment", "frogController.Draw");
         frogController.Draw(canvas);
