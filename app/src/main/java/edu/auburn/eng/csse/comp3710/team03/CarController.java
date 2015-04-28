@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,20 +22,26 @@ public class CarController implements Updateable {
     private int endColumn;
     private int endLane;
 
-    private Bitmap carBitmap;
+    private String ID = "cars";
+
+
+    private Bitmap carBitmapPortrait;
+    private Bitmap carBitmapLandscape;
 
     public CarController(Context context) {
         setEndColumn(8);
         setEndLane(4);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car);
+        carBitmapPortrait = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical);
+        carBitmapLandscape = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal);
     }
 
     public CarController(Context context, int newEndColumn, int newEndLane) {
         setEndColumn(newEndColumn);
         setEndLane(newEndLane);
         cars = new ArrayList<Car>();
-        carBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car);
+        carBitmapPortrait = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical);
+        carBitmapLandscape = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal);
     }
 
     public int getEndColumn() {
@@ -74,7 +82,24 @@ public class CarController implements Updateable {
     }
 
     private void move(Car car) {
+        car.setPrevColumn(car.getColumn());
+        car.setMoved(true);
         car.setColumn(car.getColumn() - 1);
+    }
+
+    public void restoreInstance(Bundle savedInstanceState) {
+        //pull out car locations from serialized string
+    }
+
+    public void saveInstance (Bundle bundle) {
+        Log.i("CarController","saveInstance");
+        //store car locations as serialized string
+        String serialized = "";
+        for (int i = 0; i < cars.size(); i++) {
+            serialized += Integer.toString(cars.get(i).getColumn()) + ",";
+            serialized += Integer.toString(cars.get(i).getLane()) + ";";
+        }
+        bundle.putString(ID, serialized);
     }
 
     @Override
@@ -90,19 +115,116 @@ public class CarController implements Updateable {
 
         for (Car car : tempCars) {
 */
+        //if in portrait mode
+        if (canvas.getHeight() >= canvas.getWidth()) {
+            for (Car car : cars) {
+                canvas.drawBitmap(
+                        carBitmapPortrait,
+                        null,
+                        new Rect(
+                                (int) (((float) car.getLane() / endLane) * canvas.getWidth()),
+                                (int) (((float) car.getColumn() / endColumn) * canvas.getHeight()),
+                                (int) ((((float) car.getLane() + 1) / endLane) * canvas.getWidth()),
+                                (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getHeight())
+                        ),
+                        paint
+                );
+            }
+        }
+        //else in landscape mode
+        else {
+            for (Car car : cars) {
+                canvas.drawBitmap(
+                        carBitmapLandscape,
+                        null,
+                        new Rect(
+                                (int) (((float) car.getColumn() / endColumn) * canvas.getWidth()),
+                                (int) ((((float) endLane - car.getLane() - 1) / endLane) * canvas.getHeight()),
+                                (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getWidth()),
+                                (int) ((((float) endLane - car.getLane()) / endLane) * canvas.getHeight())
+                        ),
+                        paint
+                );
+            }
+        }
+    }
 
-        for (Car car : cars) {
-            canvas.drawBitmap(
-                    carBitmap,
-                    null,
-                    new Rect(
-                            (int) (((float) car.getLane()/endLane) * canvas.getWidth()),
-                            (int) (((float) car.getColumn()/endColumn) * canvas.getHeight()),
-                            (int) ((((float) car.getLane() + 1)/endLane) * canvas.getWidth()),
-                            (int) ((((float) car.getColumn() + 1)/endColumn) * canvas.getHeight())
-                    ),
-                    paint
-            );
+    @Override
+    public void minorDraw(Canvas canvas) {
+        Paint paint = new Paint();
+        //if in portrait mode
+        if (canvas.getHeight() >= canvas.getWidth()) {
+            for (Car car : cars) {
+                if (car.getMoved()) {
+                    int top = ((int) (((float) car.getPrevColumn() / endColumn) * canvas.getHeight())
+                            + (int) (((float) car.getColumn() / endColumn) * canvas.getHeight()))
+                            / 2;
+                    int bottom = ((int) ((((float) car.getPrevColumn() + 1) / endColumn) * canvas.getHeight())
+                            + (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getHeight()))
+                            / 2;
+
+                    canvas.drawBitmap(
+                            carBitmapPortrait,
+                            null,
+                            new Rect(
+                                    (int) (((float) car.getLane() / endLane) * canvas.getWidth()),
+                                    top,
+                                    (int) ((((float) car.getLane() + 1) / endLane) * canvas.getWidth()),
+                                    bottom
+                            ),
+                            paint
+                    );
+                } else {
+                    canvas.drawBitmap(
+                            carBitmapPortrait,
+                            null,
+                            new Rect(
+                                    (int) (((float) car.getLane() / endLane) * canvas.getWidth()),
+                                    (int) (((float) car.getColumn() / endColumn) * canvas.getHeight()),
+                                    (int) ((((float) car.getLane() + 1) / endLane) * canvas.getWidth()),
+                                    (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getHeight())
+                            ),
+                            paint
+                    );
+                }
+            }
+        }
+        //else in landscape mode
+        else {
+            for (Car car : cars) {
+                if (car.getMoved()) {
+                    int left = ((int) (((float) car.getPrevColumn() / endColumn) * canvas.getWidth())
+                            + (int) (((float) car.getColumn() / endColumn) * canvas.getWidth()))
+                            / 2;
+                    int right = ((int) ((((float) car.getPrevColumn() + 1) / endColumn) * canvas.getWidth())
+                            + (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getWidth()))
+                            / 2;
+
+                    canvas.drawBitmap(
+                            carBitmapLandscape,
+                            null,
+                            new Rect(
+                                    left,
+                                    (int) ((((float) endLane - car.getLane() - 1) / endLane) * canvas.getHeight()),
+                                    right,
+                                    (int) ((((float) endLane - car.getLane()) / endLane) * canvas.getHeight())
+                            ),
+                            paint
+                    );
+                } else {
+                    canvas.drawBitmap(
+                            carBitmapLandscape,
+                            null,
+                            new Rect(
+                                    (int) (((float) car.getColumn() / endColumn) * canvas.getWidth()),
+                                    (int) ((((float) endLane - car.getLane() - 1) / endLane) * canvas.getHeight()),
+                                    (int) ((((float) car.getColumn() + 1) / endColumn) * canvas.getWidth()),
+                                    (int) ((((float) endLane - car.getLane()) / endLane) * canvas.getHeight())
+                            ),
+                            paint
+                    );
+                }
+            }
         }
     }
 

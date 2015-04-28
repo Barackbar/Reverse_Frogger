@@ -10,4 +10,6 @@ public interface Updateable {
     public void Update();
 
     public void Draw(Canvas canvas);
+
+    public void minorDraw(Canvas canvas);
 }

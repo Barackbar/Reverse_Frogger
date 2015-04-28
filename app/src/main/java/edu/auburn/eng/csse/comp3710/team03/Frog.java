@@ -6,11 +6,14 @@ package edu.auburn.eng.csse.comp3710.team03;
 public class Frog {
     private int lane;
     private int column;
-    private boolean hit;
+    private int prevLane;
+    private Boolean moved;
 
     public Frog(int newColumn, int newLane) {
         column = newColumn;
         lane = newLane;
+        prevLane = 0;
+        moved = false;
     }
 
     public int getColumn() {
@@ -27,5 +30,21 @@ public class Frog {
 
     public void setLane(int newLane) {
         lane = newLane;
+    }
+
+    public int getPrevLane() {
+        return prevLane;
+    }
+
+    public void setPrevLane(int prevLane) {
+        this.prevLane = prevLane;
+    }
+
+    public Boolean getMoved() {
+        return moved;
+    }
+
+    public void setMoved(Boolean moved) {
+        this.moved = moved;
     }
 }

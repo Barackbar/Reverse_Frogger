@@ -6,10 +6,14 @@ package edu.auburn.eng.csse.comp3710.team03;
 public class Car {
     private int lane;
     private int column;
+    private int prevColumn;
+    private Boolean moved;
 
     public Car(int newColumn, int newLane) {
         column = newColumn;
         lane = newLane;
+        prevColumn = 0;
+        moved = false;
     }
 
     public int getColumn() {
@@ -26,5 +30,21 @@ public class Car {
 
     public void setLane(int newLane) {
         lane = newLane;
+    }
+
+    public int getPrevColumn() {
+        return prevColumn;
+    }
+
+    public void setPrevColumn(int prevColumn) {
+        this.prevColumn = prevColumn;
+    }
+
+    public Boolean getMoved() {
+        return moved;
+    }
+
+    public void setMoved(Boolean moved) {
+        this.moved = moved;
     }
 }

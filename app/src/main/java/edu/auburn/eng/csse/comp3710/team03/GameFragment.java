@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import java.util.Timer;
@@ -22,7 +21,7 @@ import java.util.TimerTask;
  */
 public class GameFragment extends Fragment {
 
-    private View frogSpace;
+    private FrogSpace frogSpace;
     private View view;
 
     private Timer timer;
@@ -30,13 +29,18 @@ public class GameFragment extends Fragment {
 
     private Context context;
 
-    private FrogController frogController;
-    private CarController carController;
-
     private ImageButton lane0Button;
     private ImageButton lane1Button;
     private ImageButton lane2Button;
     private ImageButton lane3Button;
+
+    private Boolean lane0SpawnCar;
+    private Boolean lane1SpawnCar;
+    private Boolean lane2SpawnCar;
+    private Boolean lane3SpawnCar;
+
+    private static final int FROG_SPAWN_DELAY = 2;
+    private int frogSpawnCountdown;
 
     @Override
     public void onAttach(Activity activity) {
@@ -69,14 +73,49 @@ public class GameFragment extends Fragment {
         lane2Button = (ImageButton) view.findViewById(R.id.lane2Button);
         lane3Button = (ImageButton) view.findViewById(R.id.lane3Button);
 
+        lane0SpawnCar = false;
+        lane1SpawnCar = false;
+        lane2SpawnCar = false;
+        lane3SpawnCar = false;
+
+        frogSpawnCountdown = FROG_SPAWN_DELAY;
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.i("GameFragment", "onActivityCreated");
-
         super.onActivityCreated(savedInstanceState);
+
+        lane0Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lane0SpawnCar = true;
+            }
+        });
+
+        lane1Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lane1SpawnCar = true;
+            }
+        });
+
+        lane2Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lane2SpawnCar = true;
+            }
+        });
+
+        lane3Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lane3SpawnCar = true;
+            }
+        });
+
     }
 
     @Override
@@ -95,6 +134,31 @@ public class GameFragment extends Fragment {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 Log.i("GameFragment", "frogSpace.invalidate()");
+
+                if (lane0SpawnCar) {
+                    frogSpace.spawnCar(0);
+                    lane0SpawnCar = false;
+                }
+                if (lane1SpawnCar) {
+                    frogSpace.spawnCar(1);
+                    lane1SpawnCar  = false;
+                }
+                if (lane2SpawnCar) {
+                    frogSpace.spawnCar(2);
+                    lane2SpawnCar = false;
+                }
+                if (lane3SpawnCar) {
+                    frogSpace.spawnCar(3);
+                    lane3SpawnCar = false;
+                }
+
+                if (frogSpawnCountdown == 0) {
+                    frogSpace.spawnFrog();
+                    frogSpawnCountdown = FROG_SPAWN_DELAY;
+                }
+                else
+                    frogSpawnCountdown--;
+
                 frogSpace.invalidate();
             }
         };
@@ -109,8 +173,15 @@ public class GameFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.i("GameFragment", "onSaveInstanceState");
         super.onSaveInstanceState(outState);
+        frogSpace.saveInstance(outState);
     }
 }
