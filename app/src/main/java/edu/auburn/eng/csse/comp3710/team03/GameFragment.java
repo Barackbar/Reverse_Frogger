@@ -21,6 +21,8 @@ import java.util.TimerTask;
  */
 public class GameFragment extends Fragment {
 
+    ScoreShow mCallback;
+
     private FrogSpace frogSpace;
     private View view;
 
@@ -41,11 +43,24 @@ public class GameFragment extends Fragment {
 
     private static final int FROG_SPAWN_DELAY = 2;
     private int frogSpawnCountdown;
-
+/*
     @Override
     public void onAttach(Activity activity) {
         Log.i("GameFragment", "onAttach");
         super.onAttach(activity);
+        context = activity.getApplicationContext();
+    }
+*/
+    @Override
+    public void onAttach(Activity activity) {
+        Log.i("GameFragment", "onAttach");
+        super.onAttach(activity);
+        try {
+            mCallback = (ScoreShow) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + "must implement ScoreShow");
+        }
         context = activity.getApplicationContext();
     }
 

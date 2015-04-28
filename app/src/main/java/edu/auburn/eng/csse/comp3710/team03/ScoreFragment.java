@@ -15,9 +15,18 @@ import android.view.ViewGroup;
  */
 public class ScoreFragment extends Fragment {
 
+    BackGo mCallback;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        try {
+            mCallback = (BackGo) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + "must implement BackGo");
+        }
     }
 
     @Override

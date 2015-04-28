@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 
-public class MainActivity extends FragmentActivity  implements StartGame {
+public class MainActivity extends FragmentActivity  implements StartGame, ScoreShow, BackGo {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,36 @@ public class MainActivity extends FragmentActivity  implements StartGame {
         }
 
     }
+
+    public void showScore() {
+        ScoreFragment scoreFragment = (ScoreFragment)
+                getSupportFragmentManager().findFragmentById(R.id.score_layout);
+        if (scoreFragment == null) {
+            ScoreFragment sFrag = new ScoreFragment();
+            Bundle args = new Bundle();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_layout, sFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public void goBack() {
+        StartFragment  startFrag = (StartFragment)
+                getSupportFragmentManager().findFragmentById(R.id.start_fragment);
+
+        if(startFrag == null) {
+            StartFragment stFrag = new StartFragment();
+            Bundle args = new Bundle();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_layout, stFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
 
 
 /*
