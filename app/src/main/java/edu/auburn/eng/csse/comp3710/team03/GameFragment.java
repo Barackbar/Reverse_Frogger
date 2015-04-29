@@ -21,34 +21,32 @@ import java.util.TimerTask;
  */
 public class GameFragment extends Fragment {
 
-    ScoreShow mCallback;
+    private     ScoreShow           mCallback;
 
-    private FrogSpace frogSpace;
-    private View view;
+    private     FrogSpace           frogSpace;
+    private     View                view;
 
-    private Timer timer;
-    private Handler handler;
+    private     Timer               timer;
+    private     Handler             handler;
 
-    private Context context;
+    private     Context             context;
 
-    private ImageButton lane0Button;
-    private ImageButton lane1Button;
-    private ImageButton lane2Button;
-    private ImageButton lane3Button;
+    private     ImageButton         lane0Button;
+    private     ImageButton         lane1Button;
+    private     ImageButton         lane2Button;
+    private     ImageButton         lane3Button;
 
-    private Boolean lane0SpawnCar;
-    private Boolean lane1SpawnCar;
-    private Boolean lane2SpawnCar;
-    private Boolean lane3SpawnCar;
+    private     Boolean             lane0SpawnCar;
+    private     Boolean             lane1SpawnCar;
+    private     Boolean             lane2SpawnCar;
+    private     Boolean             lane3SpawnCar;
 
-    private static final int FROG_SPAWN_DELAY = 2;
-    private int frogSpawnCountdown;
+    private     static final int    FROG_SPAWN_DELAY    =   3;
+    private     int                 frogSpawnCountdown;
 
-    //ms delay between draws
-    private static final int REFRESH_DELAY = 300;
-    //game length in ms
-    private static final int GAME_DURATION = 30000;
-    private int refreshCounter = 0;
+    private     static final int    REFRESH_DELAY       =   300;
+    private     static final int    GAME_DURATION       =   30000;
+    private     int                 refreshCounter;
 
 /*
     @Override
@@ -65,26 +63,36 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        Log.i("GameFragment", "onAttach");
+
         super.onAttach(activity);
+
+        Log.i("GameFragment", "onAttach");
+
         try {
             mCallback = (ScoreShow) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + "must implement ScoreShow");
         }
+
         context = activity.getApplicationContext();
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("GameFragment", "onCreate");
+
         super.onCreate(savedInstanceState);
+
+        Log.i("GameFragment", "onCreate");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState);
+
         Log.i("GameFragment", "onCreateView");
 
         if (view != null) {
@@ -92,32 +100,36 @@ public class GameFragment extends Fragment {
             return view;
         }
 
-        view = inflater.inflate(R.layout.game_layout, container, false);
+        view                =   inflater.inflate(R.layout.game_layout, container, false);
 
-        frogSpace = (FrogSpace) view.findViewById(R.id.frogSpace);
+        frogSpace           =   (FrogSpace) view.findViewById(R.id.frogSpace);
 
-        lane0Button = (ImageButton) view.findViewById(R.id.lane0Button);
-        lane1Button = (ImageButton) view.findViewById(R.id.lane1Button);
-        lane2Button = (ImageButton) view.findViewById(R.id.lane2Button);
-        lane3Button = (ImageButton) view.findViewById(R.id.lane3Button);
+        lane0Button         =   (ImageButton) view.findViewById(R.id.lane0Button);
+        lane1Button         =   (ImageButton) view.findViewById(R.id.lane1Button);
+        lane2Button         =   (ImageButton) view.findViewById(R.id.lane2Button);
+        lane3Button         =   (ImageButton) view.findViewById(R.id.lane3Button);
 
-        lane0SpawnCar = false;
-        lane1SpawnCar = false;
-        lane2SpawnCar = false;
-        lane3SpawnCar = false;
+        lane0SpawnCar       =   false;
+        lane1SpawnCar       =   false;
+        lane2SpawnCar       =   false;
+        lane3SpawnCar       =   false;
 
-        frogSpawnCountdown = FROG_SPAWN_DELAY;
+        frogSpawnCountdown  =   FROG_SPAWN_DELAY;
+        refreshCounter      =   0;
 
         return view;
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.i("GameFragment", "onActivityCreated");
+
         super.onActivityCreated(savedInstanceState);
 
+        Log.i("GameFragment", "onActivityCreated");
+
         if (savedInstanceState != null) {
-            frogSpace.restoreInstance(savedInstanceState);
+            frogSpace.onRestoreInstanceState(savedInstanceState);
         }
 
         lane0Button.setOnClickListener(new View.OnClickListener() {
@@ -152,21 +164,27 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onStart() {
-        Log.i("GameFragment", "onStart");
+
         super.onStart();
+
+        Log.i("GameFragment", "onStart");
+
     }
 
     @Override
     public void onResume() {
-        Log.i("GameFragment", "onResume");
+
         super.onResume();
+
+        Log.i("GameFragment", "onResume");
 
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Log.i("GameFragment", "frogSpace.invalidate()");
 
+                super.handleMessage(msg);
+
+                //spawn cars
                 if (lane0SpawnCar) {
                     frogSpace.spawnCar(0);
                     lane0SpawnCar = false;
@@ -184,6 +202,7 @@ public class GameFragment extends Fragment {
                     lane3SpawnCar = false;
                 }
 
+                //spawn frogs
                 if (frogSpawnCountdown == 0) {
                     frogSpace.spawnFrog();
                     frogSpawnCountdown = FROG_SPAWN_DELAY;
@@ -191,8 +210,13 @@ public class GameFragment extends Fragment {
                 else
                     frogSpawnCountdown--;
 
+                //update and redraw
+                Log.i("GameFragment", "frogSpace.invalidate()");
                 frogSpace.invalidate();
+
+                //check game timer
                 if (refreshCounter == GAME_DURATION / REFRESH_DELAY) {
+                    Log.i("GameFragment", "mCallback.showScore()");
                     mCallback.showScore();
                 }
                 else
@@ -207,18 +231,27 @@ public class GameFragment extends Fragment {
                 handler.obtainMessage(1).sendToTarget();
             }
         }, 0, REFRESH_DELAY);
+
     }
 
     @Override
     public void onPause() {
+
         super.onPause();
+
+        Log.i("GameFragment", "onPause");
+
         timer.cancel();
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.i("GameFragment", "onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        frogSpace.saveInstance(outState);
+
+        Log.i("GameFragment", "onSaveInstanceState");
+
+        frogSpace.onSaveInstanceState(outState);
+
     }
 }

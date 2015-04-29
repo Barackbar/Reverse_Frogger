@@ -18,61 +18,85 @@ import java.util.Random;
  */
 public class FrogController implements Updateable {
 
-    private static final int MAX_DIFFICULTY = 3;
-    private static final int MIN_DIFFICULTY = 1;
+    private     static final int        MAX_DIFFICULTY  =   3;
+    private     static final int        MIN_DIFFICULTY  =   1;
 
-    private Context context;
+    private     Context                 context;
 
-    private ArrayList<Frog> frogs;
-    private ArrayList<Integer> freeColumns;
+    private     ArrayList<Frog>         frogs;
+    private     ArrayList<Integer>      freeColumns;
 
-    //endColumn and endLane are the number of columns and lanes
-    //numbered from top left to bottom right in portrait mode
-    private int endColumn;
-    private int endLane;
-    private int difficulty;
-    private int[][] carLocations;
-    private String ID = "frogs";
+    private     int                     endColumn;
+    private     int                     endLane;
+    private     int                     difficulty;
+    private     int[][]                 carLocations;
 
-    private Bitmap frogSitBitmap;
-    private Bitmap frogJumpBitmap;
+    private     String                  ID              =   "frogs";
 
-    private Random RNGesus;
+    private     BitmapFactory.Options   options;
+    private     Bitmap                  frogSitBitmap;
+    private     Paint                   paint;
 
-    private int frogsEscaped;
-    private int frogsHit;
+    private     Random                  RNGesus;
+
+    private     int                     frogsEscaped;
+    private     int                     frogsHit;
 
     public FrogController(Context newContext) {
-        context = newContext;
-        endColumn = 8;
-        endLane = 4;
-        difficulty = MAX_DIFFICULTY;
-        frogs = new ArrayList<Frog>();
-        RNGesus = new Random();
-        freeColumns  = new ArrayList<Integer>();
-        for (int i = 0; i < endColumn; i++) {
+
+        context                 =   newContext;
+
+        frogs                   =   new ArrayList<Frog>();
+
+        endColumn               =   8;
+        endLane                 =   4;
+
+        difficulty              =   MIN_DIFFICULTY;
+
+        RNGesus                 =   new Random();
+
+        freeColumns             =   new ArrayList<Integer>();
+
+        for (int i = 0; i < endColumn; i++)
             freeColumns.add(i);
-        }
-        frogsEscaped = 0;
-        frogsHit = 0;
-        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog);
+
+        frogsEscaped            =   0;
+        frogsHit                =   0;
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   1;
+        frogSitBitmap           =   BitmapFactory.decodeResource(context.getResources(), R.drawable.frog, options);
+        paint                   =   new Paint();
+
     }
 
     public FrogController(Context newContext, int newEndColumn, int newEndLane, int newDifficulty) {
-        context = newContext;
+
+        context                 =   newContext;
+
+        frogs                   =   new ArrayList<Frog>();
+
+        endColumn               =   newEndColumn;
+        endLane                 =   newEndLane;
+
         if (!setDifficulty(newDifficulty))
-            difficulty = MAX_DIFFICULTY;
-        setEndColumn(newEndColumn);
-        setEndLane(newEndLane);
-        frogs = new ArrayList<Frog>();
-        RNGesus = new Random();
-        freeColumns = new ArrayList<Integer>();
-        for (int i = 0; i < endColumn; i++) {
+            difficulty = MIN_DIFFICULTY;
+
+        RNGesus                 =   new Random();
+
+        freeColumns             =   new ArrayList<Integer>();
+
+        for (int i = 0; i < endColumn; i++)
             freeColumns.add(i);
-        }
-        frogsEscaped = 0;
-        frogsHit = 0;
-        frogSitBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.frog);
+
+        frogsEscaped            =   0;
+        frogsHit                =   0;
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   1;
+        frogSitBitmap           =   BitmapFactory.decodeResource(context.getResources(), R.drawable.frog);
+        paint                   =   new Paint();
+
     }
 
     public int getEndColumn() {
@@ -113,6 +137,7 @@ public class FrogController implements Updateable {
     }
 
     public Boolean spawnFrog() {
+
         //if there are no empty columns, no frog spawned
         if (freeColumns.size() == 0) {
             return false;
@@ -129,16 +154,21 @@ public class FrogController implements Updateable {
             freeColumns.remove(randNum);
             return true;
         }
+
     }
 
     public int[][] getFrogLocations() {
+
         //list of column,lane coord's for each frog
         int[][] locations = new int[frogs.size()][2];
+
         for (int i= 0; i < frogs.size(); i++) {
             locations[i][0] = frogs.get(i).getColumn();
             locations[i][1] = frogs.get(i).getLane();
         }
+
         return locations;
+
     }
 
     public void setCarLocations(int[][] newCarLocations) {
@@ -186,21 +216,21 @@ public class FrogController implements Updateable {
                 else if (cars[i][0] == frog.getColumn() + 2) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 5 * difficulty;
-                        forward += 3 * difficulty;
-                        rearward += 2 * difficulty;
+                        stay -= 3 * difficulty;
+                        forward += 2 * difficulty;
+                        rearward += 1 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 5 * difficulty;
-                        stay += 3 * difficulty;
-                        rearward += 2 * difficulty;
+                        forward -= 3 * difficulty;
+                        stay += 2 * difficulty;
+                        rearward += 1 * difficulty;
                     }
                     //if the car is in the rearward lane
                     else if (cars[i][1] == frog.getLane() - 1) {
-                        rearward -= 5 * difficulty;
-                        forward += 3 * difficulty;
-                        stay += 2 * difficulty;
+                        rearward -= 3 * difficulty;
+                        forward += 2 * difficulty;
+                        stay += 1 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -235,13 +265,13 @@ public class FrogController implements Updateable {
                 if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 12 * difficulty;
-                        forward += 12 * difficulty;
+                        stay -= 8 * difficulty;
+                        forward += 8 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 12 * difficulty;
-                        stay += 12 * difficulty;
+                        forward -= 8 * difficulty;
+                        stay += 8 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -270,6 +300,7 @@ public class FrogController implements Updateable {
                 frog.setLane(frog.getLane() + 1);
                 frog.setMoved(true);
             }
+            //else, stay still
             else {
                 frog.setMoved(false);
             }
@@ -277,6 +308,7 @@ public class FrogController implements Updateable {
     }
 
     private Boolean isHit(Frog frog, int[][] cars) {
+
         for (int i = 0; i < carLocations.length; i++) {
             //if frog is in same location as car, frog was hit
             if (frog.getLane() == carLocations[i][1] && frog.getColumn() == carLocations[i][0]) {
@@ -284,22 +316,31 @@ public class FrogController implements Updateable {
                 return true;
             }
         }
+
         return false;
+
     }
 
-    public void restoreInstance(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
         //pull out frog locations from serialized string
         frogs = new ArrayList<Frog>();
+
         String serialized = savedInstanceState.getString(ID);
+
+        //until the end of the string
         for (int i = 0; i < serialized.length();) {
+            //add a new frog
             frogs.add(
                     new Frog(
+                            //into column number denoted by string between ';' and ','
                             Integer.parseInt(
                                     serialized.substring(
                                             i,
                                             serialized.indexOf(
                                                     ',',
                                                     i))),
+                            //into lane number denoted by string between ',' and ';'
                             Integer.parseInt(
                                     serialized.substring(
                                             serialized.indexOf(
@@ -312,34 +353,33 @@ public class FrogController implements Updateable {
                             )
                     )
             );
+
+            //move the cursor to the next set of coordinates
             i = serialized.indexOf(';', i) + 1;
         }
+
     }
 
-    public void saveInstance (Bundle bundle) {
-        Log.i("FrogController", "saveInstance");
+    public void onSaveInstanceState(Bundle outState) {
+
+        Log.i("FrogController", "onSaveInstanceState");
+
         //store frog locations as serialized string
         String serialized = "";
+
         for (int i = 0; i < frogs.size(); i++) {
+            //frog locations will be "column,lane;column,lane;..."
             serialized += Integer.toString(frogs.get(i).getColumn()) + ",";
             serialized += Integer.toString(frogs.get(i).getLane()) + ";";
         }
-        bundle.putString(ID, serialized);
+
+        outState.putString(ID, serialized);
+
     }
 
     @Override
     public void Draw(Canvas canvas) {
-        Paint paint = new Paint();
 
-/*      //use for testing
-        ArrayList<Frog> tempFrogs = new ArrayList<>();
-        tempFrogs.add(new Frog(4, 0));
-        tempFrogs.add(new Frog(5, 1));
-        tempFrogs.add(new Frog(6, 2));
-        tempFrogs.add(new Frog(7, 3));
-
-        for (Frog frog : tempFrogs) {
-*/
         //if in portrait mode
         if (canvas.getHeight() >= canvas.getWidth()) {
             for (Frog frog : frogs) {
@@ -376,10 +416,11 @@ public class FrogController implements Updateable {
 
     @Override
     public void minorDraw(Canvas canvas) {
-        Paint paint = new Paint();
+
         //if in portrait mode
         if (canvas.getHeight() >= canvas.getWidth()) {
             for (Frog frog : frogs) {
+                //if frog moved, draw intermediate location
                 if (frog.getMoved()) {
 
                     int left = ((int) (((float) frog.getPrevLane() / endLane) * canvas.getWidth())
@@ -401,6 +442,7 @@ public class FrogController implements Updateable {
                             paint
                     );
                 }
+                //else draw normal location
                 else {
                     canvas.drawBitmap(
                             frogSitBitmap,
@@ -419,6 +461,7 @@ public class FrogController implements Updateable {
         //else in landscape mode
         else {
             for (Frog frog : frogs) {
+                //if frog moved, draw intermediate location
                 if (frog.getMoved()) {
 
                     int top = ((int) ((((float) endLane - frog.getPrevLane() - 1) / endLane) * canvas.getHeight())
@@ -442,6 +485,7 @@ public class FrogController implements Updateable {
                             paint
                     );
                 }
+                //else draw normal location
                 else {
                     canvas.drawBitmap(
                             frogSitBitmap,
@@ -461,8 +505,10 @@ public class FrogController implements Updateable {
 
     @Override
     public void Update() {
-        //look through frogs
+
+        //for all frogs
         for (Iterator<Frog> iterator = frogs.iterator(); iterator.hasNext();) {
+
             Frog frog = iterator.next();
 
             //if frog is in endLane, frog has escaped

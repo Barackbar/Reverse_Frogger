@@ -15,45 +15,60 @@ import android.view.View;
  * Created by JDSS on 16/4/15.
  */
 public class FrogSpace extends View {
+
+    private static final int SAMPLE_SIZE = 4;
+
     private FrogController frogController;
     private CarController carController;
+
+    private BitmapFactory.Options options;
     private Bitmap backgroundVertical;
     private Bitmap backgroundHorizontal;
     private Bitmap background;
-    private BitmapFactory.Options options;
     private Rect rect;
     private Paint paint;
 
-    //major action
     private Boolean major = true;
 
     private int endLane = 4;
     private int endColumn = 8;
-    private int difficulty = 1;
-    private Boolean portrait;
+    private int difficulty = 3;
 
     public FrogSpace(Context context) {
+
         super(context);
-        frogController = new FrogController(context, endColumn, endLane, difficulty);
-        carController = new CarController(context, endColumn, endLane);
-        options  = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        backgroundHorizontal = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
-        backgroundVertical = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
-        rect = null;
-        paint = new Paint();
+
+        Log.i("FrogSpace", "FrogSpace(Context context)");
+
+        frogController          =   new FrogController(context, endColumn, endLane, difficulty);
+        carController           =   new CarController(context, endColumn, endLane);
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   SAMPLE_SIZE;
+        backgroundHorizontal    =   BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
+        backgroundVertical      =   BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
+        rect                    =   null;
+        paint                   =   new Paint();
+
+
     }
 
     public FrogSpace(Context context, AttributeSet attributeSet) {
+
         super(context, attributeSet);
-        frogController = new FrogController(context, endColumn, endLane, difficulty);
-        carController = new CarController(context, endColumn, endLane);
-        options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        backgroundHorizontal = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
-        backgroundVertical = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
-        rect = null;
-        paint = new Paint();
+
+        Log.i("FrogSpace", "FrogSpace(Context context, AttributeSet attributeSet)");
+
+        frogController          =   new FrogController(context, endColumn, endLane, difficulty);
+        carController           =   new CarController(context, endColumn, endLane);
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   SAMPLE_SIZE;
+        backgroundHorizontal    =   BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
+        backgroundVertical      =   BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
+        rect                    =   null;
+        paint                   =   new Paint();
+
     }
 
     public int[][] getFrogLocations() {
@@ -81,14 +96,14 @@ public class FrogSpace extends View {
         frogController.spawnFrog();
     }
 
-    public void saveInstance(Bundle bundle) {
-        frogController.saveInstance(bundle);
-        carController.saveInstance(bundle);
+    public void onSaveInstanceState(Bundle outState) {
+        frogController.onSaveInstanceState(outState);
+        carController.onSaveInstanceState(outState);
     }
 
-    public void restoreInstance(Bundle savedInstanceState) {
-        frogController.restoreInstance(savedInstanceState);
-        carController.restoreInstance(savedInstanceState);
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        frogController.onRestoreInstanceState(savedInstanceState);
+        carController.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -132,4 +147,5 @@ public class FrogSpace extends View {
         }
 
     }
+
 }

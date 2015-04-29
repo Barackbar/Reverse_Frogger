@@ -16,31 +16,54 @@ import java.util.Iterator;
  * Created by JDSS on 16/4/15.
  */
 public class CarController implements Updateable {
-    ArrayList<Car> cars;
-    //endColumn and endLane are the number of columns and lanes
-    //numbered from top left to bottom right in portrait mode
-    private int endColumn;
-    private int endLane;
 
-    private String ID = "cars";
+    private     ArrayList<Car>  cars;
 
-    private Bitmap carBitmapPortrait;
-    private Bitmap carBitmapLandscape;
+    private     Context                 context;
 
-    public CarController(Context context) {
-        setEndColumn(8);
-        setEndLane(4);
-        cars = new ArrayList<Car>();
-        carBitmapPortrait = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical);
-        carBitmapLandscape = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal);
+    private     int                     endColumn;
+    private     int                     endLane;
+
+    private     String                  ID                  =   "cars";
+
+    private     BitmapFactory.Options   options;
+    private     int                     sampleSize = 1;
+    private     Bitmap                  carBitmapPortrait;
+    private     Bitmap                  carBitmapLandscape;
+    private     Paint                   paint;
+
+    public CarController(Context newContext) {
+
+        context                 =   newContext;
+
+        cars                    =   new ArrayList<Car>();
+
+        endColumn               =   8;
+        endLane                 =   4;
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   sampleSize;
+        carBitmapPortrait       =   BitmapFactory.decodeResource(newContext.getResources(), R.drawable.red_car_vertical, options);
+        carBitmapLandscape      =   BitmapFactory.decodeResource(newContext.getResources(), R.drawable.red_car_horizontal, options);
+        paint                   =   new Paint();
+
     }
 
-    public CarController(Context context, int newEndColumn, int newEndLane) {
-        setEndColumn(newEndColumn);
-        setEndLane(newEndLane);
-        cars = new ArrayList<Car>();
-        carBitmapPortrait = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical);
-        carBitmapLandscape = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal);
+    public CarController(Context newContext, int newEndColumn, int newEndLane) {
+
+        context                 =   newContext;
+
+        cars                    =   new ArrayList<Car>();
+
+        endColumn               =   newEndColumn;
+        endLane                 =   newEndLane;
+
+        options                 =   new BitmapFactory.Options();
+        options.inSampleSize    =   sampleSize;
+        carBitmapPortrait       =   BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical, options);
+        carBitmapLandscape      =   BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal, options);
+        paint                   =   new Paint();
+
     }
 
     public int getEndColumn() {
@@ -70,6 +93,7 @@ public class CarController implements Updateable {
     }
 
     public Boolean spawnCar(int lane) {
+
         //make sure there's no car where the new one will spawn
         for (Car car : cars) {
             if (car.getLane() == lane && car.getColumn() == endColumn - 1) {
@@ -78,15 +102,33 @@ public class CarController implements Updateable {
         }
         cars.add(new Car(endColumn - 1, lane));
         return true;
+
     }
 
     private void move(Car car) {
+
         car.setPrevColumn(car.getColumn());
         car.setMoved(true);
         car.setColumn(car.getColumn() - 1);
+
     }
 
-    public void restoreInstance(Bundle savedInstanceState) {
+    public int getSampleSize() {
+        return sampleSize;
+    }
+
+    public void setSampleSize(int newSampleSize) {
+
+        if (sampleSize > 0) {
+            sampleSize = newSampleSize;
+            options.inSampleSize = sampleSize;
+            carBitmapPortrait = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_vertical, options);
+            carBitmapLandscape = BitmapFactory.decodeResource(context.getResources(), R.drawable.red_car_horizontal, options);
+        }
+
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
         //pull out frog locations from serialized string
         cars = new ArrayList<Car>();
         String serialized = savedInstanceState.getString(ID);
@@ -115,30 +157,20 @@ public class CarController implements Updateable {
         }
     }
 
-    public void saveInstance (Bundle bundle) {
-        Log.i("CarController","saveInstance");
+    public void onSaveInstanceState(Bundle outState) {
+        Log.i("CarController","onSaveInstanceState");
         //store car locations as serialized string
         String serialized = "";
         for (int i = 0; i < cars.size(); i++) {
             serialized += Integer.toString(cars.get(i).getColumn()) + ",";
             serialized += Integer.toString(cars.get(i).getLane()) + ";";
         }
-        bundle.putString(ID, serialized);
+        outState.putString(ID, serialized);
     }
 
     @Override
     public void Draw(Canvas canvas) {
-        Paint paint = new Paint();
 
-/*        //      use for testing
-        ArrayList<Car> tempCars = new ArrayList<>();
-        tempCars.add(new Car(4, 0));
-        tempCars.add(new Car(5, 1));
-        tempCars.add(new Car(6, 2));
-        tempCars.add(new Car(7, 3));
-
-        for (Car car : tempCars) {
-*/
         //if in portrait mode
         if (canvas.getHeight() >= canvas.getWidth()) {
             for (Car car : cars) {
@@ -175,7 +207,7 @@ public class CarController implements Updateable {
 
     @Override
     public void minorDraw(Canvas canvas) {
-        Paint paint = new Paint();
+
         //if in portrait mode
         if (canvas.getHeight() >= canvas.getWidth()) {
             for (Car car : cars) {
