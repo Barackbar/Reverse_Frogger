@@ -82,5 +82,4 @@ public class StartFragment extends Fragment {
     public void changeDifficulty() {
 
     }
-
 }

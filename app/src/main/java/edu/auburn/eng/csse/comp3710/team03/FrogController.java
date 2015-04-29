@@ -18,8 +18,8 @@ import java.util.Random;
  */
 public class FrogController implements Updateable {
 
-    private static final int MAX_DIFFICULTY = 2;
-    private static final int MIN_DIFFICULTY = 0;
+    private static final int MAX_DIFFICULTY = 3;
+    private static final int MIN_DIFFICULTY = 1;
 
     private Context context;
 
@@ -46,7 +46,7 @@ public class FrogController implements Updateable {
         context = newContext;
         endColumn = 8;
         endLane = 4;
-        difficulty = 0;
+        difficulty = MAX_DIFFICULTY;
         frogs = new ArrayList<Frog>();
         RNGesus = new Random();
         freeColumns  = new ArrayList<Integer>();
@@ -61,7 +61,7 @@ public class FrogController implements Updateable {
     public FrogController(Context newContext, int newEndColumn, int newEndLane, int newDifficulty) {
         context = newContext;
         if (!setDifficulty(newDifficulty))
-            difficulty = 0;
+            difficulty = MAX_DIFFICULTY;
         setEndColumn(newEndColumn);
         setEndLane(newEndLane);
         frogs = new ArrayList<Frog>();
@@ -81,6 +81,14 @@ public class FrogController implements Updateable {
 
     private void setEndColumn(int newEndColumn) {
         endColumn = newEndColumn;
+    }
+
+    public int getFrogsHit() {
+        return frogsHit;
+    }
+
+    public int getFrogsEscaped() {
+        return frogsEscaped;
     }
 
     public int getEndLane() {
@@ -156,21 +164,21 @@ public class FrogController implements Updateable {
                 if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 15;
-                        forward += 10;
-                        rearward += 5;
+                        stay -= 7 * difficulty;
+                        forward += 5 * difficulty;
+                        rearward += 2 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 15;
-                        stay += 10;
-                        rearward += 5;
+                        forward -= 7 * difficulty;
+                        stay += 5 * difficulty;
+                        rearward += 2 * difficulty;
                     }
                     //if the car is in the rearward lane
                     else if (cars[i][1] == frog.getLane() - 1) {
-                        rearward -= 15;
-                        forward += 10;
-                        stay += 5;
+                        rearward -= 7 * difficulty;
+                        forward += 5 * difficulty;
+                        stay += 2 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -178,21 +186,21 @@ public class FrogController implements Updateable {
                 else if (cars[i][0] == frog.getColumn() + 2) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 10;
-                        forward += 7;
-                        rearward += 3;
+                        stay -= 5 * difficulty;
+                        forward += 3 * difficulty;
+                        rearward += 2 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 10;
-                        stay += 7;
-                        rearward += 3;
+                        forward -= 5 * difficulty;
+                        stay += 3 * difficulty;
+                        rearward += 2 * difficulty;
                     }
                     //if the car is in the rearward lane
                     else if (cars[i][1] == frog.getLane() - 1) {
-                        rearward -= 10;
-                        forward += 7;
-                        stay += 3;
+                        rearward -= 5 * difficulty;
+                        forward += 3 * difficulty;
+                        stay += 2 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -227,13 +235,13 @@ public class FrogController implements Updateable {
                 if (cars[i][0] == frog.getColumn() + 1) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 20;
-                        forward += 20;
+                        stay -= 12 * difficulty;
+                        forward += 12 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 20;
-                        stay += 20;
+                        forward -= 12 * difficulty;
+                        stay += 12 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -241,13 +249,13 @@ public class FrogController implements Updateable {
                 else if (cars[i][0] == frog.getColumn() + 2) {
                     //if the car is in the same lane
                     if (cars[i][1] == frog.getLane()) {
-                        stay -= 12;
-                        forward += 12;
+                        stay -= 4 * difficulty;
+                        forward += 4 * difficulty;
                     }
                     //if the car is in the forward lane
                     else if (cars[i][1] == frog.getLane() + 1) {
-                        forward -= 12;
-                        stay += 12;
+                        forward -= 4 * difficulty;
+                        stay += 4 * difficulty;
                     }
                     //else do nothing to the probabilities
                 }
@@ -304,7 +312,7 @@ public class FrogController implements Updateable {
                             )
                     )
             );
-            i = serialized.indexOf(';', i);
+            i = serialized.indexOf(';', i) + 1;
         }
     }
 

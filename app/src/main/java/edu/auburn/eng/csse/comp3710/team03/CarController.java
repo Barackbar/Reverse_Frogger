@@ -24,7 +24,6 @@ public class CarController implements Updateable {
 
     private String ID = "cars";
 
-
     private Bitmap carBitmapPortrait;
     private Bitmap carBitmapLandscape;
 
@@ -88,7 +87,32 @@ public class CarController implements Updateable {
     }
 
     public void restoreInstance(Bundle savedInstanceState) {
-        //pull out car locations from serialized string
+        //pull out frog locations from serialized string
+        cars = new ArrayList<Car>();
+        String serialized = savedInstanceState.getString(ID);
+        for (int i = 0; i < serialized.length();) {
+            cars.add(
+                    new Car(
+                            Integer.parseInt(
+                                    serialized.substring(
+                                            i,
+                                            serialized.indexOf(
+                                                    ',',
+                                                    i))),
+                            Integer.parseInt(
+                                    serialized.substring(
+                                            serialized.indexOf(
+                                                    ',',
+                                                    i) + 1,
+                                            serialized.indexOf(
+                                                    ';',
+                                                    i)
+                                    )
+                            )
+                    )
+            );
+            i = serialized.indexOf(';', i) + 1;
+        }
     }
 
     public void saveInstance (Bundle bundle) {

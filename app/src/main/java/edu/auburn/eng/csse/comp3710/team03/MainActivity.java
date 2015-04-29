@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 
 public class MainActivity extends FragmentActivity  implements StartGame, ScoreShow, BackGo {
@@ -70,9 +71,19 @@ public class MainActivity extends FragmentActivity  implements StartGame, ScoreS
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("MainActivity", "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i("MainActivity", "onRestoreInstanceState");
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
-/*
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

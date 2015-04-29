@@ -1,15 +1,12 @@
 package edu.auburn.eng.csse.comp3710.team03;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -20,19 +17,19 @@ import android.view.View;
 public class FrogSpace extends View {
     private FrogController frogController;
     private CarController carController;
+    private Bitmap backgroundVertical;
+    private Bitmap backgroundHorizontal;
     private Bitmap background;
     private BitmapFactory.Options options;
     private Rect rect;
     private Paint paint;
-
-
 
     //major action
     private Boolean major = true;
 
     private int endLane = 4;
     private int endColumn = 8;
-    private int difficulty = 0;
+    private int difficulty = 1;
     private Boolean portrait;
 
     public FrogSpace(Context context) {
@@ -41,6 +38,8 @@ public class FrogSpace extends View {
         carController = new CarController(context, endColumn, endLane);
         options  = new BitmapFactory.Options();
         options.inSampleSize = 8;
+        backgroundHorizontal = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
+        backgroundVertical = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
         rect = null;
         paint = new Paint();
     }
@@ -51,6 +50,8 @@ public class FrogSpace extends View {
         carController = new CarController(context, endColumn, endLane);
         options = new BitmapFactory.Options();
         options.inSampleSize = 8;
+        backgroundHorizontal = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
+        backgroundVertical = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_vertical, options);
         rect = null;
         paint = new Paint();
     }
@@ -63,6 +64,14 @@ public class FrogSpace extends View {
         return carController.getCarLocations();
     }
 
+    public int getFrogsHit() {
+        return frogController.getFrogsHit();
+    }
+
+    public int getFrogsEscaped() {
+        return frogController.getFrogsEscaped();
+    }
+
     public void spawnCar(int lane) {
         if (lane < endLane)
             carController.spawnCar(lane);
@@ -72,14 +81,14 @@ public class FrogSpace extends View {
         frogController.spawnFrog();
     }
 
-    public void restoreInstance(Bundle savedInstanceState) {
-        frogController.restoreInstance(savedInstanceState);
-        carController.restoreInstance(savedInstanceState);
-    }
-
     public void saveInstance(Bundle bundle) {
         frogController.saveInstance(bundle);
         carController.saveInstance(bundle);
+    }
+
+    public void restoreInstance(Bundle savedInstanceState) {
+        frogController.restoreInstance(savedInstanceState);
+        carController.restoreInstance(savedInstanceState);
     }
 
     @Override
@@ -90,10 +99,10 @@ public class FrogSpace extends View {
         //first time setup needs the canvas
         if (rect == null) {
             if (canvas.getHeight() <= canvas.getWidth()) {
-                background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road_horizontal, options);
+                background = backgroundHorizontal;
             }
             else {
-                background = BitmapFactory.decodeResource(getResources(), R.drawable.background_road, options);
+                background = backgroundVertical;
             }
             rect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
         }

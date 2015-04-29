@@ -43,6 +43,13 @@ public class GameFragment extends Fragment {
 
     private static final int FROG_SPAWN_DELAY = 2;
     private int frogSpawnCountdown;
+
+    //ms delay between draws
+    private static final int REFRESH_DELAY = 300;
+    //game length in ms
+    private static final int GAME_DURATION = 30000;
+    private int refreshCounter = 0;
+
 /*
     @Override
     public void onAttach(Activity activity) {
@@ -51,6 +58,11 @@ public class GameFragment extends Fragment {
         context = activity.getApplicationContext();
     }
 */
+
+    private int getScore() {
+        return 0;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         Log.i("GameFragment", "onAttach");
@@ -68,6 +80,7 @@ public class GameFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.i("GameFragment", "onCreate");
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -102,6 +115,10 @@ public class GameFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.i("GameFragment", "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            frogSpace.restoreInstance(savedInstanceState);
+        }
 
         lane0Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +192,11 @@ public class GameFragment extends Fragment {
                     frogSpawnCountdown--;
 
                 frogSpace.invalidate();
+                if (refreshCounter == GAME_DURATION / REFRESH_DELAY) {
+                    mCallback.showScore();
+                }
+                else
+                    refreshCounter++;
             }
         };
 
@@ -184,7 +206,7 @@ public class GameFragment extends Fragment {
             public void run() {
                 handler.obtainMessage(1).sendToTarget();
             }
-        }, 0, 300);
+        }, 0, REFRESH_DELAY);
     }
 
     @Override
