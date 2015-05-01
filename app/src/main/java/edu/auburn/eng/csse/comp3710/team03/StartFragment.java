@@ -17,7 +17,7 @@ import java.lang.Override;
  */
 public class StartFragment extends Fragment {
 
-    StartGame mCallback;
+    GameView mCallback;
     private View v;
     private Button start_Game, sound, difficulty;
 
@@ -33,7 +33,7 @@ public class StartFragment extends Fragment {
         start_Game.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.gameStart();
+                mCallback.StartGameView();
             }
         });
 
@@ -61,7 +61,7 @@ public class StartFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            mCallback = (StartGame) activity;
+            mCallback = (GameView) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + "must implement startGame");
@@ -70,6 +70,7 @@ public class StartFragment extends Fragment {
 
     public void changeSound() {
         Highscores HS = new Highscores(getActivity().getApplicationContext());
+        //TODO: figure out sound and preferences and put it into a preference
         HS.addInformation("MY DICK", 100);
         HS.addInformation("YOUR DICK", 50);
         HS.addInformation("HIS DICK", 0);

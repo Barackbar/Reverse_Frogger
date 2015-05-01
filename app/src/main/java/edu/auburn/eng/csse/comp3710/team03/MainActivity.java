@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 
-public class MainActivity extends FragmentActivity  implements StartGame, ScoreShow, BackGo {
+public class MainActivity extends FragmentActivity  implements GameView, ScoreView, MenuView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity  implements StartGame, ScoreS
         }
     }
 
-    public void gameStart() {
+    public void StartGameView() {
         GameFragment gameFragment = (GameFragment)
                 getSupportFragmentManager().findFragmentById(R.layout.game_layout);
         if (gameFragment == null) {
@@ -42,21 +42,22 @@ public class MainActivity extends FragmentActivity  implements StartGame, ScoreS
 
     }
 
-    public void showScore() {
+    public void StartScoreView(Bundle bundle) {
         ScoreFragment scoreFragment = (ScoreFragment)
                 getSupportFragmentManager().findFragmentById(R.id.score_layout);
         if (scoreFragment == null) {
             ScoreFragment sFrag = new ScoreFragment();
-            Bundle args = new Bundle();
+            sFrag.setArguments(bundle);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_layout, sFrag);
+            //TODO: make sure removing addToBackStack will prevent user from navigating back to GameFragment
             transaction.addToBackStack(null);
             transaction.commit();
         }
     }
 
-    public void goBack() {
+    public void StartMenuView() {
         StartFragment  startFrag = (StartFragment)
                 getSupportFragmentManager().findFragmentById(R.id.start_fragment);
 

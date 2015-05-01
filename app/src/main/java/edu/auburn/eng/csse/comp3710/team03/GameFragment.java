@@ -21,7 +21,7 @@ import java.util.TimerTask;
  */
 public class GameFragment extends Fragment {
 
-    private     ScoreShow           mCallback;
+    private ScoreView mCallback;
 
     private     FrogSpace           frogSpace;
     private     View                view;
@@ -69,7 +69,7 @@ public class GameFragment extends Fragment {
         Log.i("GameFragment", "onAttach");
 
         try {
-            mCallback = (ScoreShow) activity;
+            mCallback = (ScoreView) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + "must implement ScoreShow");
@@ -216,8 +216,10 @@ public class GameFragment extends Fragment {
 
                 //check game timer
                 if (refreshCounter == GAME_DURATION / REFRESH_DELAY) {
-                    Log.i("GameFragment", "mCallback.showScore()");
-                    mCallback.showScore();
+                    Log.i("GameFragment", "mCallback.StartScoreView()");
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(getString(R.string.score_id), frogSpace.getFrogsHit() - frogSpace.getFrogsEscaped());
+                    mCallback.StartScoreView(bundle);
                 }
                 else
                     refreshCounter++;

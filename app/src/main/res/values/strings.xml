@@ -8,5 +8,6 @@
     <string name="sound_string">Sound On/Off</string>
     <string name="difficulty_string">Change Difficulty</string>
     <string name="title_string">Reverse Frogger</string>
+    <string name="score_id">score</string>
 
 </resources>

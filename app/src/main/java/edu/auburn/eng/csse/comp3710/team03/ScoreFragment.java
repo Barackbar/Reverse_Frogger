@@ -1,8 +1,6 @@
 package edu.auburn.eng.csse.comp3710.team03;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,14 +13,16 @@ import android.view.ViewGroup;
  */
 public class ScoreFragment extends Fragment {
 
-    BackGo mCallback;
+    private MenuView mCallback;
+
+    private int newScore;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            mCallback = (BackGo) activity;
+            mCallback = (MenuView) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + "must implement BackGo");
@@ -32,6 +32,10 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (this.getArguments() != null) {
+            Bundle arguments = this.getArguments();
+            newScore = arguments.getInt(getString(R.string.score_id));
+        }
     }
 
     @Override
