@@ -7,20 +7,23 @@
     android:orientation="vertical">
 
     <ImageView
-        android:src="@drawable/temp_logo"
+        android:src="@drawable/game_logo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/imageViewLogo"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="10" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Reverse Frogger"
         android:id="@+id/textViewAppName"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:textSize="40dp"
+        android:layout_weight="3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,7 +49,7 @@
         android:text="Jon Jones"
         android:id="@+id/textViewTeamMembers2"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,6 +58,6 @@
         android:text="Auburn University\nCOMP3710\nSpring 2015"
         android:id="@+id/textViewUniversity"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal" />
 
 </LinearLayout>
