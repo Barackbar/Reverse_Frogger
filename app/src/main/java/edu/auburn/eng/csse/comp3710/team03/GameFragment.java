@@ -45,7 +45,7 @@ public class GameFragment extends Fragment {
     private     int                 frogSpawnCountdown;
 
     private     static final int    REFRESH_DELAY       =   300;
-    private     static final int    GAME_DURATION       =   30000;
+    private     static final int    GAME_DURATION       =   5000;
     private     int                 refreshCounter;
 
 /*

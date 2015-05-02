@@ -8,4 +8,5 @@ import android.support.annotation.Nullable;
  */
 public interface ScoreView {
     public void StartScoreView(@Nullable Bundle bundle);
+
 }

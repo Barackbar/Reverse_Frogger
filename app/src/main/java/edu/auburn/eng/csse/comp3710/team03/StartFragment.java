@@ -71,12 +71,6 @@ public class StartFragment extends Fragment {
     public void changeSound() {
         Highscores HS = new Highscores(getActivity().getApplicationContext());
         //TODO: figure out sound and preferences and put it into a preference
-        HS.addInformation("MY DICK", 100);
-        HS.addInformation("YOUR DICK", 50);
-        HS.addInformation("HIS DICK", 0);
-        String[] users = HS.pullUsers();
-        int[] scores = HS.pullScores();
-        Toast.makeText(getActivity().getApplicationContext(), users[0] + " " + Integer.toString(scores[0]), Toast.LENGTH_SHORT).show();
     }
 
     public void changeDifficulty() {

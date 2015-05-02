@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jon on 4/23/2015.
  */
@@ -17,11 +19,11 @@ public class Highscores extends SQLiteOpenHelper {
     protected static final String FIRST_TABLE_NAME = "USER_TABLE";
     protected static final String SECOND_TABLE_NAME = "SCORE_TABLE";
 
-    public static final String CREATE_FIRST_TABLE = "create table if not exists "
+    public static final String CREATE_FIRST_TABLE = "CREATE TABLE IF NOT EXISTS "
             + FIRST_TABLE_NAME
             + " ( _id integer primary key autoincrement, COL1 TEXT NOT NULL);";
 
-    public static final String CREATE_SECOND_TABLE = "create table if not exists "
+    public static final String CREATE_SECOND_TABLE = "CREATE TABLE IF NOT EXISTS "
             + SECOND_TABLE_NAME
             + " ( _id integer primary key autoincrement, COL1 INTEGER NOT NULL);";
 
@@ -34,7 +36,6 @@ public class Highscores extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_FIRST_TABLE);
         db.execSQL(CREATE_SECOND_TABLE);
-
     }
 
     @Override
@@ -60,28 +61,24 @@ public class Highscores extends SQLiteOpenHelper {
         db.close();
     }
 
-    public String[] pullUsers() {
+    public ArrayList<String> pullUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] thing = {"COL1"};
 
         Cursor cursor = db.query(FIRST_TABLE_NAME, thing, null, null, null, null, null);
 
-        String[] usernames = new String[50];
+        ArrayList<String> usernames = new ArrayList<String>();
         int i = 0;
 
         cursor.moveToFirst();
-        Log.i("DB", "SHITDICKS");
         while(!cursor.isNull(0) && cursor.moveToNext()) {
-            if (i > 49)
-                deleteProduct();
-
-            else if (i == 0) {
+            if (i == 0) {
                 cursor.moveToFirst();
-                usernames[i] = cursor.getString(0);
+                usernames.add(cursor.getString(0));
                 i++;
             }
             else {
-                usernames[i] = cursor.getString(0);
+                usernames.add(cursor.getString(0));
                 i++;
             }
         }
@@ -91,27 +88,24 @@ public class Highscores extends SQLiteOpenHelper {
         return usernames;
     }
 
-    public int[] pullScores() {
+    public ArrayList<Integer> pullScores() {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] thing = {"COL1"};
 
         Cursor cursor = db.query(SECOND_TABLE_NAME, thing, null, null, null, null, null);
 
-        int[] scores = new int[50];
+        ArrayList<Integer> scores = new ArrayList<Integer>();
         int i = 0;
 
         cursor.moveToFirst();
         while(!cursor.isNull(0) && cursor.moveToNext()) {
-            if (i > 49)
-                deleteProduct();
-
-            else if (i == 0) {
+            if (i == 0) {
                 cursor.moveToFirst();
-                scores[i] = cursor.getInt(0);
+                scores.add(cursor.getInt(0));
                 i++;
             }
             else {
-                scores[i] = cursor.getInt(0);
+                scores.add(cursor.getInt(0));
                 i++;
             }
         }
@@ -129,8 +123,8 @@ public class Highscores extends SQLiteOpenHelper {
         Cursor cursor = db.query(FIRST_TABLE_NAME, null, null, null, null, null, null);
         Cursor cursor2 = db.query(SECOND_TABLE_NAME, null, null, null, null, null, null);
 
-        cursor.moveToLast();
-        cursor2.moveToLast();
+        cursor.moveToFirst();
+        cursor2.moveToFirst();
         String user = cursor.getString(0);
         int score = cursor2.getInt(1);
 

@@ -5,4 +5,7 @@ package edu.auburn.eng.csse.comp3710.team03;
  */
 public interface MenuView {
     public void StartMenuView();
+
+    public Highscores getDatabase();
+
 }
