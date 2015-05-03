@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,6 +37,8 @@ public class GameFragment extends Fragment {
     private     ImageButton         lane2Button;
     private     ImageButton         lane3Button;
 
+    private     TextView            countdown;
+
     private     Boolean             lane0SpawnCar;
     private     Boolean             lane1SpawnCar;
     private     Boolean             lane2SpawnCar;
@@ -45,17 +48,8 @@ public class GameFragment extends Fragment {
     private     int                 frogSpawnCountdown;
 
     private     static final int    REFRESH_DELAY       =   300;
-    private     static final int    GAME_DURATION       =   5000;
+    private     static final int    GAME_DURATION       =   30000;
     private     int                 refreshCounter;
-
-/*
-    @Override
-    public void onAttach(Activity activity) {
-        Log.i("GameFragment", "onAttach");
-        super.onAttach(activity);
-        context = activity.getApplicationContext();
-    }
-*/
 
     private int getScore() {
         return 0;
@@ -104,10 +98,17 @@ public class GameFragment extends Fragment {
 
         frogSpace           =   (FrogSpace) view.findViewById(R.id.frogSpace);
 
+        if (this.getArguments() != null) {
+            Bundle arguments = this.getArguments();
+            frogSpace.setDifficulty(arguments.getInt(getString(R.string.difficulty_id)));
+        }
+
         lane0Button         =   (ImageButton) view.findViewById(R.id.lane0Button);
         lane1Button         =   (ImageButton) view.findViewById(R.id.lane1Button);
         lane2Button         =   (ImageButton) view.findViewById(R.id.lane2Button);
         lane3Button         =   (ImageButton) view.findViewById(R.id.lane3Button);
+
+        countdown           =   (TextView) view.findViewById(R.id.countdown);
 
         lane0SpawnCar       =   false;
         lane1SpawnCar       =   false;
@@ -212,6 +213,7 @@ public class GameFragment extends Fragment {
 
                 //update and redraw
                 Log.i("GameFragment", "frogSpace.invalidate()");
+                countdown.setText("Time Left: " + Integer.toString((GAME_DURATION - (REFRESH_DELAY * refreshCounter))/ 1000));
                 frogSpace.invalidate();
 
                 //check game timer

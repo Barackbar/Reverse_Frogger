@@ -17,36 +17,33 @@ import java.lang.Override;
  */
 public class StartFragment extends Fragment {
 
+    private static final int MIN_DIFFICULTY = 1;
+    private static final int MAX_DIFFICULTY = 3;
+
     GameView mCallback;
     private View v;
-    private Button start_Game, sound, difficulty;
+    private Button startGameButton, difficultyButton;
+    private int difficulty;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-                             Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.start_fragment, parent, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.start_layout, parent, false);
 
-        start_Game = (Button)v.findViewById(R.id.start_button);
-        start_Game.setOnClickListener(new Button.OnClickListener() {
+        startGameButton = (Button)v.findViewById(R.id.start_button);
+        startGameButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.StartGameView();
+                Bundle arguments = new Bundle();
+                arguments.putInt(getString(R.string.difficulty_id), difficulty);
+                mCallback.StartGameView(arguments);
             }
         });
 
-        sound = (Button)v.findViewById(R.id.sound_button);
-        sound.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeSound();
-            }
-        });
-
-        difficulty = (Button)v.findViewById(R.id.difficulty_button);
-        difficulty.setOnClickListener(new Button.OnClickListener() {
+        difficultyButton = (Button)v.findViewById(R.id.difficulty_button);
+        difficultyButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeDifficulty();
@@ -68,12 +65,13 @@ public class StartFragment extends Fragment {
         }
     }
 
-    public void changeSound() {
-        Highscores HS = new Highscores(getActivity().getApplicationContext());
-        //TODO: figure out sound and preferences and put it into a preference
-    }
-
     public void changeDifficulty() {
-
+        if (difficulty < MAX_DIFFICULTY) {
+            difficulty++;
+        }
+        else {
+            difficulty = MIN_DIFFICULTY;
+        }
+        Toast.makeText(this.getActivity().getApplicationContext(), "Difficulty: " + Integer.toString(difficulty), Toast.LENGTH_SHORT).show();
     }
 }

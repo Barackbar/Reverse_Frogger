@@ -18,6 +18,8 @@ public class FrogSpace extends View {
 
     private static final int SAMPLE_SIZE = 4;
 
+    Context context;
+
     private FrogController frogController;
     private CarController carController;
 
@@ -32,7 +34,7 @@ public class FrogSpace extends View {
 
     private int endLane = 4;
     private int endColumn = 8;
-    private int difficulty = 3;
+    private int difficulty = 1;
 
     public FrogSpace(Context context) {
 
@@ -42,6 +44,8 @@ public class FrogSpace extends View {
 
         frogController          =   new FrogController(context, endColumn, endLane, difficulty);
         carController           =   new CarController(context, endColumn, endLane);
+
+        this.context = context;
 
         options                 =   new BitmapFactory.Options();
         options.inSampleSize    =   SAMPLE_SIZE;
@@ -58,6 +62,8 @@ public class FrogSpace extends View {
         super(context, attributeSet);
 
         Log.i("FrogSpace", "FrogSpace(Context context, AttributeSet attributeSet)");
+
+        this.context = context;
 
         frogController          =   new FrogController(context, endColumn, endLane, difficulty);
         carController           =   new CarController(context, endColumn, endLane);
@@ -85,6 +91,15 @@ public class FrogSpace extends View {
 
     public int getFrogsEscaped() {
         return frogController.getFrogsEscaped();
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty =   difficulty;
+        frogController.setDifficulty(this.difficulty);
     }
 
     public void spawnCar(int lane) {

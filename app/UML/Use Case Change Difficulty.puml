@@ -1,0 +1,23 @@
+@startuml
+salt
+{
+{T
+  +Change Difficulty
+  ++Goal
+  +++Change difficulty of the game.
+  ++Entry Conditions
+  +++Must be on the Start Menu Screen.
+  ++Scenario
+  +++Press Change Difficulty button.
+  +++Difficulty cycles through the three available difficulties.
+  +++System makes toast to alert user to change in difficulty.
+  ++Exceptions
+  +++none.
+  ++Exit Conditions
+  +++Successful Exit Conditions
+  ++++Difficulty is changed.
+  +++Failure Exit Conditions
+  ++++Difficulty is not changed.
+}
+}
+@enduml

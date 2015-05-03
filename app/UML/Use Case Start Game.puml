@@ -1,0 +1,24 @@
+@startuml
+salt
+{
+{T
+  +Start Game
+  ++Goal
+  +++To start the game.
+  ++Entry Conditions
+  +++User has to be on the Start Menu Screen.
+  ++Scenario
+  +++User presses the Start Game button.
+  +++System changes fragments to the Game.
+  +++Game background is now visible.
+  +++Frogs begin spawning.
+  ++Exceptions
+  +++none.
+  ++Exit Conditions
+  +++Successful Exit Conditions
+  ++++User is now in the Game Fragment.
+  +++Failure Exit Conditions
+  ++++Game does not start.
+}
+}
+@enduml

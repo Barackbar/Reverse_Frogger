@@ -18,9 +18,13 @@ import java.util.TimerTask;
  */
 public class SplashFragment extends Fragment {
 
-    public static final int SPLASH_DELAY = 3000;
+    public static final int SPLASH_DELAY = 5000;
 
     MenuView mCallback;
+
+    View view;
+
+    Timer timer;
 
     @Override
     public void onAttach(Activity activity) {
@@ -36,15 +40,22 @@ public class SplashFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.splash_layout, container, false);
+        if (view != null) {
+            ((ViewGroup) view.getParent()).removeView(view);
+            return view;
+        }
 
+        view = inflater.inflate(R.layout.splash_layout, container, false);
         return view;
+
     }
 
     @Override
     public void onResume() {
+
         super.onResume();
 
         final Handler handler = new Handler() {
@@ -55,7 +66,7 @@ public class SplashFragment extends Fragment {
             }
         };
 
-        Timer timer = new Timer("timer", false);
+        timer = new Timer("timer", false);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -63,5 +74,11 @@ public class SplashFragment extends Fragment {
             }
         }, SPLASH_DELAY);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
     }
 }

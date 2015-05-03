@@ -3,6 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/countdown"
+        android:gravity="center"
+        android:text="test" />
+
     <edu.auburn.eng.csse.comp3710.team03.FrogSpace
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -53,4 +61,5 @@
             android:padding="0dp" />
 
     </LinearLayout>
+
 </LinearLayout>

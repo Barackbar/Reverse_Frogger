@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +18,29 @@ import java.util.ArrayList;
  */
 public class ScoreFragment extends Fragment {
 
+    private static final String TEXTVIEW_TEXT_ID = "textview";
+    private static final String NAME_ENTERED_ID = "nameentered";
+    private static final String NEW_SCORE_ID = "newscore";
+
     private MenuView mCallback;
 
-    private int newScore;
+    private View rootView;
 
-    private EditText user;
-    TextView tx;
-    Button b;
-    Button menuButton;
-    View rootView;
-    ArrayList<String> users;
-    ArrayList<Integer> scores;
-    int i;
-    Highscores db;
+    private EditText editText;
+    private TextView textView;
+    private Button enterButton;
+    private Button menuButton;
+
+    private int newScore;
+    private ArrayList<String> users;
+    private ArrayList<Integer> scores;
+    private Boolean nameEntered = false;
+
+    private Highscores db;
 
     @Override
     public void onAttach(Activity activity) {
+
         super.onAttach(activity);
 
         try {
@@ -43,47 +49,58 @@ public class ScoreFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + "must implement MenuView");
         }
-
-        db = mCallback.getDatabase();
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         if (this.getArguments() != null) {
             Bundle arguments = this.getArguments();
             newScore = arguments.getInt(getString(R.string.score_id));
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.score_layout, container, false);
+        if (rootView != null) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+            return rootView;
+        }
 
-        i = 0;
-        user = (EditText)rootView.findViewById(R.id.editText);
-        tx = (TextView) rootView.findViewById(R.id.textView);
-        b = (Button)rootView.findViewById(R.id.button);
-        menuButton = (Button) rootView.findViewById(R.id.menuButton);
+        db          =               mCallback.getDatabase();
 
-        b.setOnClickListener(new Button.OnClickListener() {
+        rootView    =               inflater.inflate(R.layout.score_layout, container, false);
+
+        editText    =   (EditText)  rootView.findViewById(R.id.editText);
+        textView    =   (TextView)  rootView.findViewById(R.id.textView);
+        enterButton =   (Button)    rootView.findViewById(R.id.button);
+        menuButton  =   (Button)    rootView.findViewById(R.id.menuButton);
+        menuButton.setVisibility(View.INVISIBLE);
+
+        enterButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.addInformation(user.getText().toString(), newScore);
 
-                user.setVisibility(View.INVISIBLE);
-                b.setVisibility(View.INVISIBLE);
+                db.addInformation(editText.getText().toString(), newScore);
+
+                editText.setVisibility(View.INVISIBLE);
+                enterButton.setVisibility(View.INVISIBLE);
 
                 users = db.pullUsers();
                 scores = db.pullScores();
                 String temp = "";
-                while(i < users.size()) {
+
+                for (int i = users.size() - 1; i >= 0; i--) {
                     temp += users.get(i) + " : " + scores.get(i) + "\n";
-                    i++;
                 }
-                tx.setText(temp);
+
+                textView.setText(temp);
+                nameEntered = true;
+                menuButton.setVisibility(View.VISIBLE);
 
             }
         });
@@ -94,6 +111,20 @@ public class ScoreFragment extends Fragment {
                 mCallback.StartMenuView();
             }
         });
+
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean(NAME_ENTERED_ID)) {
+                nameEntered = true;
+                editText.setVisibility(View.INVISIBLE);
+                enterButton.setVisibility(View.INVISIBLE);
+                textView.setText(savedInstanceState.getString(TEXTVIEW_TEXT_ID));
+            }
+            else {
+                newScore = savedInstanceState.getInt(NEW_SCORE_ID);
+                nameEntered = false;
+            }
+        }
 
         return rootView;
 
@@ -122,6 +153,14 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TEXTVIEW_TEXT_ID, textView.getText().toString());
+        outState.putBoolean(NAME_ENTERED_ID, nameEntered);
+        outState.putInt(NEW_SCORE_ID, newScore);
     }
 
     @Override

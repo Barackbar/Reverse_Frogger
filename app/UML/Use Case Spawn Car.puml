@@ -1,0 +1,25 @@
+@startuml
+salt
+{
+{T
+  +Spawn Car
+  ++Goal
+  +++Spawn a Car in a certain Lane.
+  ++Entry Conditions
+  +++User must be in the Game Fragment.
+  ++Scenario
+  +++User presses one of the four Car spawn buttons.
+  +++System spawns a Car in the corresponding lane.
+  +++Car begins travelling along the lane.
+  +++Car despawns at end of the Lane.
+  ++Exceptions
+  +++Only Spawns one Car per Lane per refresh cycle regardless of number of button presses.
+  ++Exit Conditions
+  +++Successful Exit Conditions
+  ++++Car spawns in correct Lane.
+  +++Failure Exit Conditions
+  ++++Car does not spawn.
+  ++++Car spawns in incorrect Lane.
+}
+}
+@enduml

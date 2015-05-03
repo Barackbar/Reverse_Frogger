@@ -131,7 +131,7 @@ public class CarController implements Updateable {
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         //pull out frog locations from serialized string
         cars = new ArrayList<Car>();
-        String serialized = savedInstanceState.getString(ID);
+        String serialized = savedInstanceState.getString(context.getString(R.string.cars_id));
         for (int i = 0; i < serialized.length();) {
             cars.add(
                     new Car(
@@ -165,7 +165,7 @@ public class CarController implements Updateable {
             serialized += Integer.toString(cars.get(i).getColumn()) + ",";
             serialized += Integer.toString(cars.get(i).getLane()) + ";";
         }
-        outState.putString(ID, serialized);
+        outState.putString(context.getString(R.string.cars_id), serialized);
     }
 
     @Override

@@ -1,0 +1,11 @@
+@startuml
+actor User
+
+rectangle system {
+User -> (ChangeDifficulty)
+User -> (AddHighScore)
+User -> (StartGame)
+User -> (ReturnToMainMenu)
+User -> (SpawnCar)
+}
+@enduml

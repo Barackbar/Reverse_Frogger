@@ -1,8 +1,5 @@
 package edu.auburn.eng.csse.comp3710.team03;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -10,15 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.zip.Inflater;
-
 
 public class MainActivity extends FragmentActivity  implements GameView, ScoreView, MenuView {
-
-
 
     Highscores db;
 
@@ -29,7 +19,7 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
         db = new Highscores(getApplicationContext());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment splashFragment = fragmentManager.findFragmentById(R.id.splash_layout);
+        Fragment splashFragment = fragmentManager.findFragmentById(R.id.main_layout);
 
         setContentView(R.layout.main_layout);
 
@@ -46,12 +36,12 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
         super.onResume();
     }
 
-    public void StartGameView() {
+    public void StartGameView(Bundle arguments) {
         GameFragment gameFragment = (GameFragment)
                 getSupportFragmentManager().findFragmentById(R.layout.game_layout);
         if (gameFragment == null) {
             GameFragment gFrag = new GameFragment();
-            Bundle args = new Bundle();
+            gFrag.setArguments(arguments);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_layout, gFrag);
@@ -83,7 +73,7 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
 
     public void StartMenuView() {
         StartFragment  startFrag = (StartFragment)
-                getSupportFragmentManager().findFragmentById(R.id.start_fragment);
+                getSupportFragmentManager().findFragmentById(R.id.start_layout);
 
         if(startFrag == null) {
             StartFragment stFrag = new StartFragment();
@@ -97,14 +87,14 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        Log.i("MainActivity", "onSaveInstanceState");
-        super.onSaveInstanceState(outState);
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("MainActivity", "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -113,21 +103,4 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment gameFragment = fragmentManager.findFragmentById(R.id.main_layout);
-
-        setContentView(R.layout.main_layout);
-
-        if (gameFragment == null) {
-            gameFragment = new GameFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.main_layout, gameFragment)
-                    .commit();
-        }
-    }*/
 }

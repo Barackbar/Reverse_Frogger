@@ -46,42 +46,57 @@ public class Highscores extends SQLiteOpenHelper {
     }
 
     public void addInformation(String username, int score) {
-        ContentValues values = new ContentValues();
-        values.put("COL1", username);
-        //values.put("COL2", score);
+
+        ContentValues val1 = new ContentValues();
+        ContentValues val2 = new ContentValues();
+        Log.i("Highscores", "1");
+        val1.put("COL1", username);
+        Log.i("Highscores", "2");
+        val2.put("COL1", score);
+        Log.i("Highscores", "3");
 
         SQLiteDatabase db = this.getWritableDatabase();
-
-        db.insert(FIRST_TABLE_NAME, null, values);
-
-        ContentValues secondval = new ContentValues();
-        secondval.put("COL1", score);
-        db.insert(SECOND_TABLE_NAME, null, secondval);
+        Log.i("Highscores", "4");
+        db.insert(FIRST_TABLE_NAME, null, val1);
+        Log.i("Highscores", "5");
+        db.insert(SECOND_TABLE_NAME, null, val2);
+        Log.i("Highscores", "6");
 
         db.close();
     }
 
     public ArrayList<String> pullUsers() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] thing = {"COL1"};
 
-        Cursor cursor = db.query(FIRST_TABLE_NAME, thing, null, null, null, null, null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"COL1"};
+
+        Cursor cursor = db.query(FIRST_TABLE_NAME, columns, null, null, null, null, null);
 
         ArrayList<String> usernames = new ArrayList<String>();
+        /**/
+        cursor.moveToFirst();
+        if (!cursor.isNull(0)) {
+            do {
+                usernames.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        /**/
+        /*
         int i = 0;
-
         cursor.moveToFirst();
         while(!cursor.isNull(0) && cursor.moveToNext()) {
             if (i == 0) {
                 cursor.moveToFirst();
+                Log.i("Highscores", cursor.getString(0));
                 usernames.add(cursor.getString(0));
                 i++;
             }
             else {
+                Log.i("Highscores", cursor.getString(0));
                 usernames.add(cursor.getString(0));
                 i++;
             }
-        }
+        }*/
 
         cursor.close();
         db.close();
@@ -90,13 +105,21 @@ public class Highscores extends SQLiteOpenHelper {
 
     public ArrayList<Integer> pullScores() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] thing = {"COL1"};
+        String[] columns = {"COL1"};
 
-        Cursor cursor = db.query(SECOND_TABLE_NAME, thing, null, null, null, null, null);
+        Cursor cursor = db.query(SECOND_TABLE_NAME, columns, null, null, null, null, null);
 
         ArrayList<Integer> scores = new ArrayList<Integer>();
+        /**/
+        cursor.moveToFirst();
+        if (!cursor.isNull(0)) {
+            do {
+                scores.add(cursor.getInt(0));
+            } while (cursor.moveToNext());
+        }
+        /**/
+        /*
         int i = 0;
-
         cursor.moveToFirst();
         while(!cursor.isNull(0) && cursor.moveToNext()) {
             if (i == 0) {
@@ -109,7 +132,7 @@ public class Highscores extends SQLiteOpenHelper {
                 i++;
             }
         }
-
+        */
         cursor.close();
         db.close();
         return scores;

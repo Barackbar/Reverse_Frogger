@@ -31,8 +31,6 @@ public class FrogController implements Updateable {
     private     int                     difficulty;
     private     int[][]                 carLocations;
 
-    private     String                  ID              =   "frogs";
-
     private     BitmapFactory.Options   options;
     private     Bitmap                  frogSitBitmap;
     private     Paint                   paint;
@@ -326,7 +324,7 @@ public class FrogController implements Updateable {
         //pull out frog locations from serialized string
         frogs = new ArrayList<Frog>();
 
-        String serialized = savedInstanceState.getString(ID);
+        String serialized = savedInstanceState.getString(context.getString(R.string.frogs_id));
 
         //until the end of the string
         for (int i = 0; i < serialized.length();) {
@@ -358,6 +356,16 @@ public class FrogController implements Updateable {
             i = serialized.indexOf(';', i) + 1;
         }
 
+        freeColumns = new ArrayList<Integer>();
+        for (int i = 0; i < endColumn; i++)
+            freeColumns.add(i);
+
+        for (int i = 0; i < frogs.size(); i++) {
+            if (freeColumns.contains(frogs.get(i).getColumn())) {
+                freeColumns.remove((Integer) frogs.get(i).getColumn());
+            }
+        }
+
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -373,7 +381,7 @@ public class FrogController implements Updateable {
             serialized += Integer.toString(frogs.get(i).getLane()) + ";";
         }
 
-        outState.putString(ID, serialized);
+        outState.putString(context.getString(R.string.frogs_id), serialized);
 
     }
 
