@@ -1,0 +1,64 @@
+@startuml
+
+[-> MainActivity : start app
+create SplashFragment
+activate MainActivity
+MainActivity -> SplashFragment : create
+activate SplashFragment
+SplashFragment -> MainActivity : StartMenuView
+deactivate SplashFragment
+
+create StartFragment
+MainActivity -> StartFragment : create
+activate StartFragment
+StartFragment -> MainActivity : StartGameView
+deactivate StartFragment
+
+create GameFragment
+MainActivity -> GameFragment : create
+activate GameFragment
+create FrogSpace
+GameFragment -> FrogSpace : constructs
+activate FrogSpace
+create FrogController
+FrogSpace -> FrogController : constructs
+activate FrogController
+create CarController
+FrogSpace -> CarController : constructs
+activate CarController
+loop game running
+create Frog
+FrogController -> Frog : create
+create Car
+CarController -> Car : create
+end
+
+FrogController -> FrogSpace : score
+FrogController --> FrogSpace
+deactivate FrogController
+CarController --> FrogSpace
+deactivate CarController
+FrogSpace -> GameFragment : score
+FrogSpace --> GameFragment
+deactivate FrogSpace
+GameFragment -> MainActivity : StartScoreView
+deactivate GameFragment
+
+create ScoreFragment
+MainActivity -> ScoreFragment : create
+activate ScoreFragment
+ScoreFragment -> MainActivity : getDatabase
+create Highscores
+ScoreFragment -> Highscores : create
+activate Highscores
+ScoreFragment -> Highscores : addInformation
+ScoreFragment -> Highscores : pullUsers
+ScoreFragment -> Highscores : pullScores
+Highscores --> ScoreFragment
+deactivate Highscores
+ScoreFragment -> MainActivity : StartMenuView
+deactivate ScoreFragment
+
+deactivate MainActivity
+
+@enduml

@@ -61,7 +61,7 @@ public class StartFragment extends Fragment {
             mCallback = (GameView) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + "must implement startGame");
+                    + "must implement StartGameView");
         }
     }
 

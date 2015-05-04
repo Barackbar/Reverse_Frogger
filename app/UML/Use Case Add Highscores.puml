@@ -11,11 +11,14 @@ salt
   +++User enters username on Score Fragment.
   +++User presses the Enter button.
   +++User and score are added to the Database.
-  +++System displays all Highscores
+  +++System displays all Highscores.
   ++Exceptions
+  +++none.
   ++Exit Conditions
   +++Successful Exit Conditions
+  ++++Highscores are now visible.
   +++Failure Exit Conditions
+  ++++Highschores are not visible.
 }
 }
 @enduml

@@ -1,0 +1,114 @@
+@startuml
+class Frog {
+    Column
+    Lane
+}
+
+class Car {
+    Column
+    Lane
+}
+
+class FrogController {
+    List<Frogs>
+    endColumn
+    endLane
+    getFrogLocations()
+    getFrogsHit()
+    getFrogsEscaped()
+    setDifficulty()
+    spawnFrog()
+    Jump()
+    isHit()
+}
+
+class CarController {
+    List<Cars>
+    endColumn
+    endLane
+    getCarLocations()
+    spawnCar()
+    move()
+}
+
+class FrogSpace {
+    EndLane
+    EndColumn
+    Difficulty
+    Background
+    getFrogLocations()
+    getCarLocations()
+    getFrogsHit()
+    getFrogsEscaped()
+    spawnCar()
+    spawnFrog()
+}
+
+class GameFragment {
+    FrogSpawnDelay
+    RefreshDelay
+    GameDuration
+}
+
+class Highscores {
+    addInformation()
+    pullUsers()
+    pullScores()
+}
+
+class MainActivity
+
+class ScoreFragment
+
+class SplashFragment
+
+class StartFragment {
+    Difficulty
+    changeDifficulty()
+}
+
+interface Updateable {
+    Draw()
+    minorDraw()
+    Update()
+}
+
+interface GameView {
+    StartGameView()
+}
+
+interface MenuView {
+    StartMenuView()
+    getDatabase()
+}
+
+interface ScoreView {
+    StartScoreView()
+}
+
+MainActivity -- SplashFragment
+MainActivity -- ScoreFragment
+MainActivity -- GameFragment
+MainActivity -- StartFragment
+MainActivity --|> GameView
+MainActivity --|> MenuView
+MainActivity --|> ScoreView
+
+ScoreFragment "1" -- "1" Highscores
+MainActivity "1" -- "1" Highscores
+
+ScoreFragment -- MenuView
+SplashFragment -- MenuView
+GameFragment -- ScoreView
+StartFragment -- GameView
+
+GameFragment "1" -- "1" FrogSpace
+FrogController "1" -- "0..*" Frog
+CarController "1" -- "0..*" Car
+FrogSpace "1" -- "1" FrogController
+FrogSpace "1" -- "1" CarController
+FrogController --|> Updateable
+CarController --|> Updateable
+
+
+@enduml

@@ -73,30 +73,13 @@ public class Highscores extends SQLiteOpenHelper {
         Cursor cursor = db.query(FIRST_TABLE_NAME, columns, null, null, null, null, null);
 
         ArrayList<String> usernames = new ArrayList<String>();
-        /**/
+
         cursor.moveToFirst();
         if (!cursor.isNull(0)) {
             do {
                 usernames.add(cursor.getString(0));
             } while (cursor.moveToNext());
         }
-        /**/
-        /*
-        int i = 0;
-        cursor.moveToFirst();
-        while(!cursor.isNull(0) && cursor.moveToNext()) {
-            if (i == 0) {
-                cursor.moveToFirst();
-                Log.i("Highscores", cursor.getString(0));
-                usernames.add(cursor.getString(0));
-                i++;
-            }
-            else {
-                Log.i("Highscores", cursor.getString(0));
-                usernames.add(cursor.getString(0));
-                i++;
-            }
-        }*/
 
         cursor.close();
         db.close();

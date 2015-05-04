@@ -45,7 +45,6 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_layout, gFrag);
-            //transaction.addToBackStack(null);
             transaction.commit();
         }
 
@@ -60,8 +59,6 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_layout, sFrag);
-            //TODO: make sure removing addToBackStack will prevent user from navigating back to GameFragment
-            //transaction.addToBackStack(null);
             transaction.commit();
         }
     }
@@ -81,7 +78,6 @@ public class MainActivity extends FragmentActivity  implements GameView, ScoreVi
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_layout, stFrag);
-            //transaction.addToBackStack(null);
             transaction.commit();
         }
     }

@@ -1,0 +1,23 @@
+@startuml
+salt
+{
+{T
+  +Return to Main Menu
+  ++Goal
+  +++Return to Start Menu Fragment.
+  ++Entry Conditions
+  +++User must be in Score Fragment
+  ++Scenario
+  +++User presses Return to Main Menu button.
+  +++System replaces Score Fragment with the Start Menu Fragment.
+  +++User now sees the Start Menu.
+  ++Exceptions
+  +++none.
+  ++Exit Conditions
+  +++Successful Exit Conditions
+  ++++Start Menu is now visible.
+  +++Failure Exit Conditions
+  ++++Start Menu is not visible.
+}
+}
+@enduml

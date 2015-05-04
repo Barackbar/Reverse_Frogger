@@ -1,0 +1,27 @@
+@startuml
+class FrogSpace {
+    Lanes
+    Columns
+    Difficulty
+
+}
+
+class Frog {
+    Lane
+    Column
+}
+
+class Car {
+    Lane
+    Column
+}
+
+class Score {
+    score
+}
+
+FrogSpace -- Frog
+FrogSpace -- Car
+FrogSpace -- Score
+
+@enduml
