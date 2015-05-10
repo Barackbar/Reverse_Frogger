@@ -213,7 +213,8 @@ public class GameFragment extends Fragment {
 
                 //update and redraw
                 Log.i("GameFragment", "frogSpace.invalidate()");
-                countdown.setText("Time Left: " + Integer.toString((GAME_DURATION - (REFRESH_DELAY * refreshCounter))/ 1000));
+                //TODO: add countdown timer to landscape layout
+                //countdown.setText("Time Left: " + Integer.toString((GAME_DURATION - (REFRESH_DELAY * refreshCounter))/ 1000));
                 frogSpace.invalidate();
 
                 //check game timer
